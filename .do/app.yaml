@@ -1,0 +1,11 @@
+name: design-template
+static_sites:
+  - name: design-template
+    github:
+      repo: jegan/design-template
+      branch: main
+      deploy_on_push: true
+    build_command: npm run build
+    output_dir: dist
+    catchall_document: index.html
+    environment_slug: node-js
