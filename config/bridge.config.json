@@ -1,0 +1,8 @@
+{
+  "masterTemplatePath": "/Users/jegan/Applications/proto/brain",
+  "storybookBaseUrl": "https://walrus.internal.digitalocean.com",
+  "walrusPackage": "@do/walrus",
+  "walrusVersion": "60.1.5",
+  "walrusInstalled": true,
+  "preWalrusMode": false
+}

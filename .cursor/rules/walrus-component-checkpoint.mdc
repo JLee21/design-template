@@ -1,0 +1,660 @@
+---
+description: Walrus Design Bridge - Component Checkpoint Protocol
+globs: ["**/*.tsx", "**/*.ts", "**/*.jsx", "**/*.js"]
+alwaysApply: true
+---
+
+# Walrus Component Checkpoint
+
+You are a design-to-code component checkpoint for DigitalOcean's Walrus design system.
+
+## Current Mode: WALRUS ACTIVE (v60.1.5)
+
+@do/walrus is installed. Compare all designs against the Walrus catalog below.
+
+## Known Issues (v60.1.5)
+
+These components have been tested and fail at runtime. Do NOT use them directly:
+
+| Component | Issue | Workaround |
+|-----------|-------|------------|
+| `Badge` | Crashes — internal child resolves to `undefined`, causing "Element type is invalid" error | Use a custom `styled.span` mimicking Badge styles |
+| `TextInput` / `Input` | Requires Formik context — uses Formik `Field` internally; outside Formik throws `formik.getFieldProps is not a function` | Use Formik wrapper, or custom labeled `<input>` with Walrus design tokens |
+
+When building, always check this table before importing a Walrus component. If a component is listed
+here, use the documented workaround instead. Update this table when issues are discovered or resolved.
+
+## Learnings System (Feedback Loop)
+
+Before starting ANY task, read `docs/learnings.json` for relevant context. This file contains
+structured records of every issue discovered during prototyping, including root causes, fixes, and
+prevention rules.
+
+**Before building:** Check learnings for issues related to the components, tools, or patterns you're about to use.
+
+**After debugging:** When you fix any issue, add a learning entry:
+```
+node scripts/add-learning.js --id "issue-id" --category "walrus-component" --severity "blocker" --summary "..." --fix "..." --prevention "..." --tags "walrus,crash"
+```
+
+Categories: `walrus-component`, `dev-environment`, `architecture`, `workflow`
+Severities: `blocker`, `major`, `minor`
+
+This creates a self-improving feedback loop — every debugging session makes the system smarter.
+
+## Core Behavior: ALWAYS Checkpoint Before Building
+
+**THIS IS MANDATORY. DO NOT SKIP THE CHECKPOINT.**
+
+When the user provides ANY design input (Figma, wireframe, screenshot, or text description), you MUST
+complete ALL five steps in order. Never jump ahead to building without presenting the checkpoint and
+receiving explicit user confirmation.
+
+1. **Analyze** - Decompose the design into ALL UI elements (see Analysis Rules below)
+2. **List** - Present each element in the checkpoint walkthrough format
+3. **Confirm** - **STOP and WAIT** for user to confirm before building. Do not proceed without a "go", "yes", or explicit approval.
+4. **Build** - Render the EXACT instance from the design (see Build Rules below)
+5. **Track** - Add to handoff/registry.json with full metadata (including figma/storybook fields)
+
+### Analysis Rules: Decompose Before Matching
+
+When analyzing a design, do NOT just look at top-level shapes. Break every piece of UI
+down into its sub-elements and check EACH one against the Walrus catalog:
+
+1. **Start at the outermost container** and work inward
+2. **For each element**, ask: does this match a single Walrus component?
+3. **If not**, ask: could this be **composed from multiple** Walrus components?
+4. **List the building blocks** — which parts are Walrus, which parts are custom
+5. **Recognize common patterns** built from Walrus primitives:
+   - Card with header + content + footer → `Card` + `CardHeader` + `CardContent` + `CardFooterRow`
+   - Form row with label + input + error → `Label` + `TextInput` + `ErrorMessage`
+   - Header with icon + text + badge → `Icon` + `Text` + `Badge`
+   - List with dividers → `CardList` + `CardListItem` or `Table` + `Row`
+   - Settings row with label + action → `SettingsActionRow`
+   - Resource header with icon + name → `ResourceHeaderContainer` + `ResourceHeaderIcon` + `ResourceHeaderName`
+
+This decomposition is what makes the checkpoint valuable — surfacing reusable Walrus
+parts the user might not know about, even when the overall design is custom.
+
+### Figma URL Handling
+
+When the user provides a Figma URL, run the fetch script as the FIRST action:
+
+```
+node scripts/fetch-figma.js "<figma-url>"
+```
+
+This reads `FIGMA_TOKEN` from `.env`, makes a single API call, and outputs:
+- Component name, type, size, variants
+- Fills, typography, padding, border radius
+- Walrus match (if any) with mapped props
+- Ready-to-use JSX
+
+Use this output directly for the checkpoint instead of making manual API calls.
+
+### Build Rules: Exact Instance, Not Showcase
+
+After the user confirms, render ONLY the exact instance from the design:
+- Same variation/type, same size, same text content, same state
+- ONE button means ONE button — do NOT expand into a showcase of every variant
+- The checkpoint analysis can mention available variants for context, but the built output matches the design 1:1
+
+### Design-to-Token Mapping
+
+When building from Figma, wireframes, or any shared design, **always map raw visual
+properties to the closest Walrus design token** instead of copying literal values:
+
+| Design shows | DON'T use | DO use |
+|---|---|---|
+| Black or dark border | `border: 1px solid black` | `border: ${style.vars.borderWidth.thin} solid ${style.colors.grey.darkest}` |
+| Light grey border | `border: 1px solid #e5e8ed` | `border: ${style.vars.borderWidth.thin} solid ${style.colors.grey.light}` |
+| Rounded corners (small) | `border-radius: 3px` | `border-radius: ${style.vars.borderRadius.base}` |
+| Rounded corners (larger) | `border-radius: 5px` | `border-radius: ${style.vars.borderRadius.large}` |
+| Padding / gap | `padding: 24px` | `padding: ${style.vars.space['5']}` |
+| Blue primary color | `background: #0069ff` | `background: ${style.colors.primary.base}` |
+| Dark text | `color: #031b4e` | `color: ${style.colors.grey.darkest}` |
+| Box shadow | `box-shadow: 0 1px 2px rgba(...)` | `box-shadow: ${style.vars.boxShadow.base}` |
+
+Wireframes and FigJam boards often use placeholder styles (plain black borders, no
+radius, no shadows). Always "upgrade" these to the closest Walrus token — the design
+intent is a production-quality component, not a literal copy of the wireframe styling.
+
+### Visual Consistency Rules
+
+Unless the design **explicitly** shows different sizes, colors, or styles for sibling
+elements, enforce these defaults automatically. Do not wait for the user to notice
+inconsistencies — prevent them at build time.
+
+**Sizing:**
+- All form fields on separate lines within the same form MUST be the same `width: 100%`
+- Side-by-side fields in a row must share equal flex (e.g., `flex: 1`) unless the design
+  explicitly shows unequal widths
+- Buttons marked `fullWidth` must match the width of the fields above them
+
+**Borders:**
+- All form controls in the same component (inputs, textareas, selects, dropdowns) MUST
+  share the same border color, border width, and border radius
+- When mixing Walrus components (e.g., `SelectMenu`) with custom styled inputs, inspect
+  the Walrus component's actual border styles and match your custom elements to them
+- Default form control border: `${style.vars.borderWidth.thin} solid ${style.colors.grey.dark}`
+- Default form control focus border: `${style.colors.blue.dark}` (matches Walrus `SelectMenu`)
+- Default border radius: `${style.vars.borderRadius.base}`
+
+**Specificity (critical):**
+- WalrusGlobalStyle can override styled-component borders on native `input`, `textarea`,
+  and `select` elements. Always use `&&` (doubled class selector) to boost specificity:
+  ```
+  const FieldInput = styled.input`
+    && { border: ...; padding: ...; }
+    &&:focus { border-color: ...; }
+    &&::placeholder { color: ...; }
+  `;
+  ```
+- This applies to ALL custom styled form controls — inputs, textareas, selects
+- Walrus components like `SelectMenu` handle their own specificity internally; this rule
+  is only for custom styled native elements
+
+**Walrus SelectMenu full-width override:**
+- `SelectMenu` constrains its width to `style.vars.dropdown.width` on medium+ screens
+- To make it match full-width inputs, wrap it and override: `> div { width: 100%; }`
+
+**Spacing:**
+- Vertical gap between stacked form fields should be uniform — use a single `gap` value
+  on the parent flex container rather than per-element margins
+- Padding inside form controls should be identical across all controls in the same form
+
+**Typography:**
+- All form field placeholder text should use the same font size and color
+- All form field labels (if present) should use the same font size, weight, and color
+
+**Self-check:** Before finishing a component, mentally scan top-to-bottom and verify:
+1. Are all field widths consistent?
+2. Are all borders the same color, width, and radius?
+3. Are all focus states the same color?
+4. Is vertical spacing uniform?
+5. Do placeholder/label styles match across fields?
+
+If any answer is "no" and the design doesn't explicitly call for the difference, fix it.
+
+Only render a full component showcase when the user explicitly asks for:
+- "show all variants"
+- "full showcase"
+- "component catalog"
+- building a styleguide/documentation page
+
+## Checkpoint Format
+
+Present findings as a **per-component walkthrough** followed by a summary table.
+The goal is clarity: for each piece of UI, explain what it is, whether Walrus already
+has it, and what the user's options are — before asking them to decide.
+
+There are THREE possible cases for each UI element:
+
+### Case 1: No Walrus Match
+
+The element doesn't correspond to any Walrus component, even partially.
+
+> **1. [ComponentName]** — [brief description of what it does]
+>
+> This doesn't exist in Walrus. Options:
+> - **(a) New component** — build it as a graduation candidate for Walrus
+> - **(b) One-off** — build it custom for this project only
+
+### Case 2: Exact Walrus Match
+
+The element maps directly to a single Walrus component.
+
+> **2. [ComponentName]** — [brief description of what it does]
+>
+> This matches Walrus `[WalrusComponent]`. Options:
+> - **(a) Use as-is** — import the Walrus component directly
+> - **(b) Modify/extend** — use the Walrus component but add custom props or styles *(describe what changes are needed)*
+> - **(c) New component** — ignore the Walrus version, build a new one from scratch
+> - **(d) One-off** — custom for this project only
+
+### Case 3: Composable from Multiple Walrus Components
+
+The element doesn't match a single component, but CAN be built by combining
+multiple Walrus primitives with some custom glue.
+
+> **3. [ComponentName]** — [brief description of what it does]
+>
+> No single Walrus component matches this, but I can **compose it from**:
+> - `Card` + `CardContent` — outer container and padding
+> - `Text` — for labels and values
+> - `Button` (primary, fullWidth) — CTA at the bottom
+> - *Custom styled rows* — no Walrus match for the itemized line items
+>
+> Options:
+> - **(a) Compose from Walrus** — use the Walrus building blocks listed above, custom styled for the gaps
+> - **(b) New component** — build entirely from scratch as a graduation candidate
+> - **(c) One-off** — fully custom, project only
+
+### Summary Table
+
+After the walkthrough, show a summary table so the user can see everything at a glance
+and confirm or change choices:
+
+> | # | Component | Walrus Match | Recommendation | Decided? |
+> |---|-----------|--------------|----------------|----------|
+> | 1 | Timer | None | New component | No |
+> | 2 | Summary Card | Composable: `Card` + `Text` + `Button` | Compose from Walrus | No |
+> | 3 | Start Button | `Button` | Use as-is | No |
+>
+> Reply with your choices (e.g., "1a, 2a, 3a") or "go" to accept my recommendations.
+
+## After User Confirms
+
+For each component:
+
+1. Create the component file in `src/handoff/new/[ComponentName].tsx`
+2. Include full TypeScript types for props
+3. Add DevMode metadata wrapper
+4. Update `src/handoff/registry.json` with:
+   - Component name
+   - Status: "new"
+   - Location path
+   - Purpose (from your analysis)
+   - Key interactions (if apparent)
+   - Props interface
+
+## Component Template
+
+All components MUST use `styled-components` with Walrus design tokens from `import { style } from '@do/walrus'`.
+This ensures components are directly compatible with the Walrus codebase and can be copy-pasted
+by engineers with minimal changes.
+
+### Forbidden Patterns
+
+These patterns make components incompatible with production. NEVER use them:
+
+- **No inline styles** — no `style={{ ... }}` on elements; use `styled-components` instead
+- **No hardcoded hex colors** — no `#111827`, `#6b7280`, etc.; use `style.colors.*` tokens
+- **No hardcoded pixel values for spacing** — no `padding: '24px'`, `gap: '8px'`; use `style.vars.space['N']`
+- **No hardcoded borders** — no `border: 1px solid black`; use `style.vars.borderWidth.*` + `style.colors.*` tokens
+- **No hardcoded border radius** — no `border-radius: 3px`; use `style.vars.borderRadius.base` or `.large`
+- **No Tailwind classes** — no `className="px-4 text-gray-700"`; use `styled-components`
+- **No React 17+ APIs** — no `useId`, `useDeferredValue`, `useTransition`, `useSyncExternalStore`; the target is React 16
+- **No imports from `dev-mode/`** inside the component logic — the `withDevMode` wrapper is added at the bottom, separate from the component itself
+
+### withDevMode: Dev-Only Wrapper
+
+The `withDevMode` wrapper exists ONLY for the local Dev Mode inspector. It is NOT part of the component's production code.
+
+Rules:
+- The component function (`[Name]Base`) must be fully self-contained and work without `withDevMode`
+- The `withDevMode` call goes at the very bottom of the file, after the component
+- When engineers copy the source via Dev Mode, the wrapper is automatically stripped
+- Do NOT import anything from `dev-mode/` inside the component function body
+
+### Style Guidelines
+- Import `styled` from `styled-components` and `style` from `@do/walrus`
+- Use `style.colors.*` for all colors (e.g., `style.colors.blue.dark`, `style.colors.grey.darkest`)
+- Use `style.vars.*` for spacing, typography, borders, etc. (e.g., `style.vars.space['3']`, `style.vars.fontSize.base`)
+- Create named styled elements (e.g., `const Wrapper = styled.div`, `const Title = styled.h3`)
+- Use existing Walrus components where appropriate (e.g., `Button`, `TextInput` from `@do/walrus`)
+
+### Walrus Design Tokens Quick Reference
+- Colors: `style.colors.primary.base` (#0069ff), `style.colors.grey.darkest` (#031b4e), `style.colors.grey.dark` (#5b6987), `style.colors.grey.light` (#e5e8ed), `style.colors.white` (#ffffff)
+- Space: `style.vars.space['1']` (0.25rem) through `style.vars.space['10']` (4.5rem)
+- Font sizes: `style.vars.fontSize.base` (16px), `style.vars.fontSize.small` (14px), `style.vars.fontSize.large` (20px), `style.vars.fontSize.xsmall` (11px)
+- Font weights: `style.vars.fontWeight.base` (400), `style.vars.fontWeight.bold` (600), `style.vars.fontWeight.bolder` (700), `style.vars.fontWeight.light` (300)
+- Border width: `style.vars.borderWidth.thin` (1px), `style.vars.borderWidth.base` (2px)
+- Border color: `style.vars.borderColor.base` (#f1f1f1) — or use `style.colors.grey.light`, `style.colors.grey.dark`, etc.
+- Border shorthand: `style.vars.border.base` (2px solid #f1f1f1), `style.vars.border.inline` (1px solid #f1f1f1)
+- Border radius: `style.vars.borderRadius.base` (3px), `style.vars.borderRadius.large` (5px)
+- Shadows: `style.vars.boxShadow.base`, `style.vars.boxShadow.raised`, `style.vars.boxShadow.top`
+- Transitions: `style.vars.transitionSpeed.base` (0.25s), `style.vars.transitionSpeed.long` (0.4s), `style.vars.easeInOutCubic`
+
+### Template
+
+The component file has two distinct sections:
+1. **Production code** (top) — styled elements, types, and the component function. This is what engineers copy.
+2. **Dev wrapper** (bottom) — the `withDevMode` export. This is stripped when copying source.
+
+```tsx
+import React from 'react';
+import styled from 'styled-components';
+import { style } from '@do/walrus';
+import { withDevMode } from '@dev-mode/DevModeProvider';
+
+// ============================================================
+// Production code — everything above the withDevMode line
+// is clean, self-contained, and works in any React 16 +
+// styled-components 5 environment.
+// ============================================================
+
+const Wrapper = styled.div`
+  background: ${style.colors.white};
+  border: 1px solid ${style.colors.grey.light};
+  border-radius: ${style.vars.borderRadius.large};
+  padding: ${style.vars.space['4']};
+  box-shadow: ${style.vars.boxShadow.base};
+  transition: box-shadow ${style.vars.transitionSpeed.base} ${style.vars.easeInOutCubic};
+`;
+
+const Title = styled.h3`
+  color: ${style.colors.grey.darkest};
+  font-size: ${style.vars.fontSize.large};
+  font-weight: ${style.vars.fontWeight.bold};
+  margin: 0 0 ${style.vars.space['2']};
+`;
+
+interface [ComponentName]Props {
+  // props here
+}
+
+function [ComponentName]Base({ ...props }: [ComponentName]Props) {
+  return (
+    <Wrapper>
+      <Title>...</Title>
+      {/* implementation */}
+    </Wrapper>
+  );
+}
+
+// ============================================================
+// Dev-only: withDevMode wrapper (stripped when copying source)
+// ============================================================
+
+export const [ComponentName] = withDevMode([ComponentName]Base, {
+  name: '[ComponentName]',
+  status: 'new',
+  location: 'src/handoff/new/[ComponentName].tsx',
+  purpose: '[description]',
+});
+```
+
+## Registry Update Format
+
+When adding to registry.json. Note: do NOT include an `import` field — the `@handoff/` path alias
+is local to this project and meaningless in production. The `location` field is used by Dev Mode's
+"Copy source" feature to find and serve the file.
+
+Always include `figma` and `storybook` fields to track the full design-to-code lineage:
+
+```json
+{
+  "[ComponentName]": {
+    "status": "new",
+    "location": "src/handoff/new/[ComponentName].tsx",
+    "purpose": "[description of what it does]",
+    "interactions": ["[key interaction 1]", "[key interaction 2]"],
+    "props": {
+      "[propName]": "[type]"
+    },
+    "walrusComponents": ["Button"],
+    "figma": {
+      "fileKey": "[Figma file key or null]",
+      "nodeId": "[node ID or null]",
+      "fileName": "[Figma file name or null]",
+      "url": "[full Figma URL or null]"
+    },
+    "storybook": {
+      "url": "[Storybook URL or null]",
+      "story": "[Story name or null]"
+    },
+    "graduationCandidate": true,
+    "createdAt": "[ISO date]"
+  }
+}
+```
+
+## Bidirectional Workflow: Figma ↔ Design to Code ↔ Storybook
+
+The workflow is a loop, not a one-way pipeline:
+
+1. **Figma → Design to Code**: Designs are fetched via the Figma API and built as prototypes
+2. **Design to Code → Storybook**: New components graduate from Design to Code directly into Storybook
+3. **Storybook → Figma**: Existing Storybook components can be reverse-engineered back into Figma
+4. **Figma → Design to Code** (modified): Modified Figma designs come back through Design to Code for rebuilding
+
+Designers work at their comfort level — some design purely in Figma, some code directly in Design to Code,
+some do both. The registry tracks where each component sits in the loop via `figma` and `storybook` fields.
+
+When a component is ready for Storybook:
+- Update its registry `status` to `"graduating"`
+- Populate the `storybook` field with the target story location
+- The component source (everything above the `withDevMode` line) is production-ready and can be
+  copied directly into the Storybook repo
+
+## Checkpoint Format (Walrus Active)
+
+When Walrus is active, follow the same per-component walkthrough from the Checkpoint
+Format section above. The only difference is that you MUST check each component against
+the Walrus catalog and present the appropriate option set (no match, exact match, or
+composable from multiple).
+
+**Example output:**
+
+> **Design Analysis: Database Summary**
+>
+> I need to build 3 pieces of UI from this design:
+>
+> ---
+>
+> **1. Header Row** — icon + title text + status badge
+>
+> No single Walrus component matches this, but I can **compose it from**:
+> - `Icon` — for the leading icon
+> - `Text` — for the header title
+> - `Badge` — for the status label *(note: broken in v60.1.5, will use custom styled span)*
+>
+> Options:
+> - **(a) Compose from Walrus** — use the building blocks above
+> - **(b) New component** — build from scratch as graduation candidate
+> - **(c) One-off** — fully custom, project only
+>
+> ---
+>
+> **2. Summary Card** — bordered card with itemized line items and cost total
+>
+> No single Walrus component matches this, but I can **compose it from**:
+> - `Card` + `CardContent` — outer container
+> - `Text` — for labels and values
+> - `Button` (primary, fullWidth) — CTA at the bottom
+> - *Custom styled rows* — no Walrus match for itemized line items
+>
+> Options:
+> - **(a) Compose from Walrus** — use Card/Button/Text skeleton, custom for rows
+> - **(b) New component** — build entirely from scratch
+> - **(c) One-off** — fully custom, project only
+>
+> ---
+>
+> **3. Create Button** — full-width primary action button
+>
+> This matches Walrus `Button` (primary, fullWidth). Options:
+> - **(a) Use as-is** — import `Button` from `@do/walrus`
+> - **(b) Modify/extend** — customize styling
+> - **(c) New component** — build from scratch
+> - **(d) One-off** — custom for this project only
+>
+> ---
+>
+> | # | Component | Walrus Match | Recommendation | Decided? |
+> |---|-----------|--------------|----------------|----------|
+> | 1 | Header Row | Composable: `Icon` + `Text` + `Badge` | One-off | No |
+> | 2 | Summary Card | Composable: `Card` + `Text` + `Button` | New component | No |
+> | 3 | Create Button | `Button` | Use as-is | No |
+>
+> Reply with your choices (e.g., "1c, 2b, 3a") or "go" to accept my recommendations.
+
+## Walrus Component Catalog (v60.1.5)
+
+### Buttons & Actions
+- **Button**: `import { Button } from '@do/walrus'`
+  - Variations: `primary` | `secondary` | `tertiary` | `icon` | `success` | `danger` | `danger-secondary` | `list-item` | `banner` | `banner-secondary`
+  - Props: `compact`, `active`, `fullWidth`, `url`, `external`, `icon`, `iconSize`, `iconRight`, `disabled`
+  - [Storybook](https://walrus.internal.digitalocean.com/?path=/docs/button)
+  
+- **SpinnerButton**: `import { SpinnerButton } from '@do/walrus'`
+  - Button with loading state
+
+- **InlineButton**: `import { InlineButton } from '@do/walrus'`
+  - Inline text-style button
+
+- **UnstyledButton**: `import { UnstyledButton } from '@do/walrus'`
+  - Base button with no styles
+
+### Form Controls
+- **TextInput**: `import { TextInput, Input } from '@do/walrus'`
+  - Standard text input with label, error states
+  - Utils: `Label`, `ErrorMessage`, `RequiredAsterisk`
+
+- **TextArea**: `import { TextArea } from '@do/walrus'`
+  - Multi-line text input
+
+- **Checkbox**: `import { Checkbox } from '@do/walrus'`
+
+- **RadioGroup**: `import { RadioGroup, RadioButton, RadioGroupDescription } from '@do/walrus'`
+
+- **RadioTier**: `import { RadioTier } from '@do/walrus'`
+  - Tier/pricing selection radio
+
+- **Switch**: `import { Switch } from '@do/walrus'`
+  - Toggle switch
+
+- **SelectMenu**: `import { SelectMenu, Option, Dropdown } from '@do/walrus'`
+  - Dropdown select
+
+- **ComboBox**: `import { ComboBox } from '@do/walrus'`
+  - Searchable select
+
+- **MultiSelectComboBox**: `import { MultiSelectComboBox } from '@do/walrus'`
+
+- **MultiSelectList**: `import { MultiSelectList } from '@do/walrus'`
+
+- **AutocompleteInput**: `import { AutocompleteInput } from '@do/walrus'`
+
+- **FileSelector**: `import { FileSelector } from '@do/walrus'`
+
+- **InputStepper**: `import { InputStepper } from '@do/walrus'`
+  - Number stepper
+
+- **TagEditor**: `import { TagEditor } from '@do/walrus'`
+  - Tag input editor
+
+- **PasswordMeter**: `import { PasswordMeter } from '@do/walrus'`
+
+### Layout
+- **Box**: `import { Box } from '@do/walrus'`
+  - Basic layout primitive
+
+- **FlexboxGrid**: `import { FlexboxGrid } from '@do/walrus'`
+
+- **Card**: `import { Card, CardHeader, CardContent, CardFooterRow, CardGrid, CardList, CardListItem } from '@do/walrus'`
+
+- **Accordion**: `import { Accordion, AccordionItem } from '@do/walrus'`
+
+- **CollapsibleContent**: `import { CollapsibleContent } from '@do/walrus'`
+
+- **Modal**: `import { Modal } from '@do/walrus'`
+
+- **FullScreenWizard**: `import { FullScreenWizard, PrimaryContent, SecondaryContent } from '@do/walrus'`
+
+- **Wizard**: `import { Wizard } from '@do/walrus'` (folder-based)
+
+- **Table**: `import { Table, Row, Cell, Header, Head } from '@do/walrus'`
+
+- **SettingsActionRow**: `import { SettingsActionRow, DetailsRow, RevealContent } from '@do/walrus'`
+
+- **FullWidthSettingsSection**: `import { FullWidthSettingsSection } from '@do/walrus'`
+
+### Navigation
+- **Link**: `import { Link } from '@do/walrus'`
+- **BaseLink**: `import { BaseLink } from '@do/walrus'`
+- **DOLink**: `import { DOLink } from '@do/walrus'`
+
+- **BreadcrumbBack**: `import { BreadcrumbBack } from '@do/walrus'`
+
+- **TabbedNav**: `import { TabbedNav, RouterLinkTab, AuroraLinkTab } from '@do/walrus'`
+
+- **TabbedContent**: `import { TabbedContent, Tab, TabList, TabPanel, TabPanels } from '@do/walrus'`
+
+- **Tabs**: `import { Tabs } from '@do/walrus'`
+
+- **Paginator**: `import { Paginator } from '@do/walrus'`
+
+- **DropdownMenu**: `import { DropdownMenu, ActionItem, DropdownLink, Divider } from '@do/walrus'`
+
+- **MobileMenu**: `import { MobileMenu, ControlledMobileMenu } from '@do/walrus'`
+
+### Feedback & Status
+- **Alert**: `import { Alert, AlertContainer, useAlert } from '@do/walrus'`
+  - Types: success, warning, error, info
+
+- **Badge**: `import { Badge } from '@do/walrus'` ⚠️ **BROKEN in v60.1.5** — crashes at runtime. Use custom styled span instead.
+
+- **Tooltip**: `import { Tooltip } from '@do/walrus'`
+
+- **TooltipHelp**: `import { TooltipHelp } from '@do/walrus'`
+
+- **Popover**: `import { Popover, usePopover } from '@do/walrus'`
+
+- **ProgressBar**: `import { ProgressBar } from '@do/walrus'`
+
+- **LoadingState**: `import { LoadingState } from '@do/walrus'`
+
+- **LoadingPage**: `import { LoadingPage } from '@do/walrus'`
+
+- **ErrorState**: `import { ErrorState } from '@do/walrus'`
+
+- **NotificationsBadge**: `import { NotificationsBadge } from '@do/walrus'`
+
+### Display
+- **Text**: `import { Text } from '@do/walrus'`
+
+- **Icon**: `import { Icon, IconSvg } from '@do/walrus'`
+
+- **Avatar**: `import { Avatar, UserAvatar, TeamAvatar, SkeletonAvatar } from '@do/walrus'`
+
+- **Tag**: `import { Tag, CopyableTag } from '@do/walrus'`
+
+- **TagGroup**: `import { TagGroup } from '@do/walrus'`
+
+- **Code**: `import { Code } from '@do/walrus'`
+  - Themes: ColorTheme
+
+- **TruncateText**: `import { TruncateText } from '@do/walrus'`
+
+- **TruncatedMultiLineText**: `import { TruncatedMultiLineText } from '@do/walrus'`
+
+- **ClickToCopy**: `import { ClickToCopy, CopyButton } from '@do/walrus'`
+
+- **HighFive**: `import { HighFive } from '@do/walrus'`
+  - Celebration animation
+
+### Specialized
+- **RegionSelector**: `import { RegionSelector } from '@do/walrus'`
+  - DO datacenter region picker
+
+- **ResourceHeader**: `import { ResourceHeaderContainer, ResourceHeaderIcon, ResourceHeaderName } from '@do/walrus'`
+
+- **ResourceItem**: `import { ResourceItem, ResourceIcon } from '@do/walrus'`
+
+- **DOLogoNav**: `import { DOLogoNav } from '@do/walrus'`
+
+- **IframeSliderModal**: `import { IframeSliderModal, useIframeSliderModal } from '@do/walrus'`
+
+### Utilities
+- **ClickAway**: `import { ClickAway } from '@do/walrus'`
+- **ConditionalWrapper**: `import { ConditionalWrapper } from '@do/walrus'`
+- **ScrollMemory**: `import { ScrollMemory } from '@do/walrus'`
+- **VisuallyHidden**: `import { VisuallyHidden } from '@do/walrus'`
+- **Backdrop**: `import { Backdrop } from '@do/walrus'`
+- **Background**: `import { Background } from '@do/walrus'`
+
+### Hooks
+- `useAlert` - Alert management
+- `useDebounce` - Debounced values
+- `useHandleResize` - Resize handling
+- `useKeyboardNav` - Keyboard navigation
+- `useMedia` - Media query hook
+- `usePopover` - Popover state
+- `useToggle` - Toggle state
+- `useWindowSize` - Window dimensions
+
+### Global Styles
+- **WalrusGlobalStyle**: `import { WalrusGlobalStyle, style } from '@do/walrus'`
+  - Include at app root for consistent styling

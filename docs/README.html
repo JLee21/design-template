@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background: #111318;
+      margin: 0;
+    }
+    .readme-content {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.7;
+      color: #d4d4d8;
+      font-size: 15px;
+    }
+    .readme-content h1 {
+      color: #ffffff;
+      border-bottom: none;
+      padding-bottom: 8px;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+      text-wrap: balance;
+    }
+    .readme-content h1 + p {
+      color: #8b8fa3;
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+    .readme-content h2 {
+      color: #ffffff;
+      margin-top: 80px;
+      margin-bottom: 16px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      text-wrap: balance;
+    }
+    .readme-content h3 {
+      color: #e4e4e7;
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 8px;
+      text-wrap: balance;
+    }
+    .readme-content p {
+      margin: 10px 0;
+      color: #a1a1aa;
+      text-wrap: pretty;
+    }
+    .readme-content a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    .readme-content a:hover {
+      text-decoration: underline;
+    }
+    .readme-content code {
+      background: #1c1e26;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-family: 'SF Mono', 'Fira Code', Monaco, 'Courier New', monospace;
+      font-size: 13px;
+      color: #e4e4e7;
+      border: 1px solid #262830;
+    }
+    .readme-content pre {
+      background: #1c1e26;
+      padding: 16px 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      border: 1px solid #262830;
+      font-size: 13.5px;
+      position: relative;
+      margin: 12px 0;
+    }
+    .readme-content pre code {
+      background: none;
+      padding: 0;
+      border: none;
+      color: #d4d4d8;
+    }
+    .readme-content .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #262830;
+      border: 1px solid #363844;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      color: #71717a;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.4;
+    }
+    .readme-content .copy-btn:hover {
+      background: #363844;
+      color: #e4e4e7;
+    }
+    .readme-content pre:hover .copy-btn {
+      opacity: 1;
+    }
+    .readme-content ul {
+      padding-left: 24px;
+      color: #a1a1aa;
+      list-style-type: disc !important;
+    }
+    .readme-content li {
+      margin: 8px 0;
+      color: #a1a1aa;
+      text-wrap: pretty;
+    }
+    .readme-content li::marker {
+      color: #ffffff;
+    }
+    .readme-content li strong {
+      color: #e4e4e7;
+    }
+    .readme-content table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 16px 0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .readme-content th, .readme-content td {
+      border: 1px solid #262830;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 14px;
+    }
+    .readme-content th {
+      background: #1c1e26;
+      font-weight: 600;
+      color: #e4e4e7;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .readme-content td {
+      color: #a1a1aa;
+    }
+    .readme-content strong {
+      font-weight: 600;
+      color: #e4e4e7;
+    }
+    .readme-content em {
+      font-style: italic;
+      color: #a1a1aa;
+    }
+  </style>
+</head>
+<body>
+<div class="readme-content">
+
+<h1>Walrus Design-to-Code</h1>
+
+<p>A starter template for building production-ready UI components using DigitalOcean's Walrus design system, directly from Cursor.</p>
+
+<h2 id="what-you-need">What You Need</h2>
+
+<ul>
+  <li><strong>Cursor</strong>, Request access through <a href="https://do-internal.atlassian.net/wiki/spaces/IT/pages/2251456553/How+To+Access+Cursor">IT Self-Service</a>, then download from <a href="https://cursor.sh">cursor.sh</a></li>
+  <li><strong>A Figma account</strong> with access to the design files</li>
+  <li><strong>The <code>design-template</code> project folder</strong> (shared with you by your team)</li>
+</ul>
+
+<h2 id="getting-to-know-cursor">Getting to Know Cursor</h2>
+
+<p>When you open a project in Cursor, you'll see a few key areas. Here's what they are and what they do.</p>
+
+<h3 id="file-tree">The file tree (left sidebar)</h3>
+
+<p>This shows all the files and folders in your project. Click any file to open it in the editor. You don't need to manually edit these files, the agent does that for you, but it's useful to see what's there.</p>
+
+<h3 id="editor">The editor (center)</h3>
+
+<p>When you click a file in the tree, it opens here. When the agent makes changes to a file, you'll see a <strong>diff view</strong>, green highlights for new code, red for removed code. You can review what changed, but you don't need to write or edit code yourself.</p>
+
+<h3 id="chat-panel">The AI chat panel (Cmd+L)</h3>
+
+<p>This is where you talk to the agent. Press <strong>Cmd+L</strong> (Mac) or <strong>Ctrl+L</strong> (Windows) to open it. Type what you want in plain language and the agent will do the work. This is the main way you interact with the project.</p>
+
+<h3 id="terminal">The terminal (Ctrl+`)</h3>
+
+<p>The agent uses this to run commands, installing dependencies, starting the dev server, etc. You'll see text scrolling here when the agent is working. You don't need to type anything in the terminal yourself; the agent handles it.</p>
+
+<h3 id="chat-modes">Chat modes</h3>
+
+<p>The chat panel has four modes you can switch between using the mode selector at the top:</p>
+
+<ul>
+  <li><strong>Agent mode</strong>, The agent can read files, write code, and run commands. Use this when you want it to build or change something. This is the mode you'll use most.</li>
+  <li><strong>Ask mode</strong>, The agent can only read and answer questions. Nothing gets changed. Use this when you want to understand something or explore the codebase.</li>
+  <li><strong>Plan mode</strong>, The agent analyzes the task and proposes a step-by-step plan before doing anything. Use this when you want to think through an approach before committing to it.</li>
+  <li><strong>Debug mode</strong>, The agent investigates bugs and errors systematically. Use this when something is broken and you want to understand why before fixing it.</li>
+</ul>
+
+<h3 id="undoing-changes">Undoing changes</h3>
+
+<p>If the agent does something you don't like:</p>
+
+<ul>
+  <li><strong>Cmd+Z</strong> in any file to undo edits</li>
+  <li>Or just tell the agent: <em>"Undo that"</em> or <em>"Revert the last change"</em></li>
+  <li>You can also reject changes in the diff view before they're applied</li>
+</ul>
+
+<h2 id="first-time-setup">First-Time Setup</h2>
+
+<h3 id="step-1">Step 1: Open the project</h3>
+
+<p>Open Cursor → <strong>File → Open Folder</strong> → select the <code>design-template</code> folder.</p>
+
+<h3 id="step-2">Step 2: Connect to Figma</h3>
+
+<p>Go to <strong>Cursor Settings → MCP</strong> and click <strong>"Connect"</strong> next to Figma. A browser window will open, sign in with your Figma account and click <strong>Authorize</strong>.</p>
+
+<h3 id="step-3">Step 3: Set up the project</h3>
+
+<p>Open the AI chat panel (<strong>Cmd+L</strong>) and say:</p>
+
+<pre><code>Set up the project for me</code></pre>
+
+<p>The agent will install everything the project needs. Wait for it to finish and give you a localhost link.</p>
+
+<h2 id="tutorial">Tutorial: Build Your First Prototype</h2>
+
+<p>Once setup is complete, try building something to see the workflow in action.</p>
+
+<h3 id="start-server">1. Start the server</h3>
+
+<p>Open chat (<strong>Cmd+L</strong>) and say:</p>
+
+<pre><code>Start the dev server</code></pre>
+
+<p>Click the localhost link it gives you to open the preview in your browser.</p>
+
+<h3 id="describe-build">2. Describe what you want to build</h3>
+
+<p>Tell the agent what you're designing in plain language. You can start small with a single component or describe a full layout, whatever you have in mind.</p>
+
+<p><strong>Start with a component:</strong></p>
+
+<pre><code>Build me a primary button that says "Create Droplet"</code></pre>
+
+<pre><code>Build a card with a title, a short description, and a secondary button</code></pre>
+
+<p><strong>Describe a layout or page:</strong></p>
+
+<pre><code>Build a settings page with a header that says "General Settings", three form fields
+for name, email, and team, and a save button at the bottom</code></pre>
+
+<pre><code>Create a dashboard header with a welcome message, a search bar, and a "Create" button
+on the right side</code></pre>
+
+<p><strong>Combine multiple components:</strong></p>
+
+<pre><code>Build a notification card that has a warning alert at the top, a list of three items
+below it, and a "Dismiss all" button at the bottom</code></pre>
+
+<p>The agent will show you a <strong>checkpoint table</strong>, a summary of what it plans to build and which Walrus components match. Reply <strong>"go"</strong> to approve, or pick options to customize.</p>
+
+<h3 id="see-it-live">3. See it live</h3>
+
+<p>Your browser auto-refreshes with the prototype. Ask the agent to make changes in plain language:</p>
+
+<pre><code>Make the title larger</code></pre>
+
+<pre><code>Change the button to secondary</code></pre>
+
+<pre><code>Add a hover state</code></pre>
+
+<pre><code>Move the search bar to the left of the Create button</code></pre>
+
+<h3 id="tips">General tips for describing designs</h3>
+
+<ul>
+  <li><strong>Be specific about layout</strong>, mention things like "side by side", "stacked vertically", "on the right side"</li>
+  <li><strong>Name the components you want</strong>, "a button", "a card", "a text input", "a dropdown"</li>
+  <li><strong>Include content</strong>, give it real text, labels, and placeholder values instead of generic "lorem ipsum"</li>
+  <li><strong>Describe states</strong>, "the button should be disabled", "show an error message below the email field"</li>
+  <li><strong>Iterate</strong>, start with the basic structure, then refine with follow-up messages</li>
+</ul>
+
+<h2 id="working-with-figma">Working with Figma</h2>
+
+<p>Once you're comfortable with the basic workflow, you can build directly from Figma designs.</p>
+
+<p>In Figma, find the frame or component you want to build. <strong>Right-click → Copy link.</strong> Then tell the agent:</p>
+
+<pre><code>Implement this design from Figma.
+@https://www.figma.com/design/XXXXX/YourFile?node-id=123-456</code></pre>
+
+<p>The agent fetches the design, analyzes every element, and shows you a checkpoint before writing any code.</p>
+
+<p><strong>Tips for best results:</strong></p>
+
+<ul>
+  <li><strong>Start with individual components</strong> (a button, a card, an alert) rather than full screens</li>
+  <li><strong>Review the checkpoint table</strong>, it tells you what the agent found and what it plans to use</li>
+  <li><strong>Break complex screens into pieces</strong>, ask for one section at a time rather than an entire page</li>
+</ul>
+
+<h2 id="quick-reference">Quick Reference</h2>
+
+<table>
+  <tr>
+    <th>You want to...</th>
+    <th>Say this to the agent</th>
+  </tr>
+  <tr>
+    <td>Set up the project</td>
+    <td>"Set up the project for me"</td>
+  </tr>
+  <tr>
+    <td>Start the dev server</td>
+    <td>"Start the dev server"</td>
+  </tr>
+  <tr>
+    <td>Build a component</td>
+    <td>"Build me a primary button that says Create Droplet"</td>
+  </tr>
+  <tr>
+    <td>Build a layout</td>
+    <td>"Build a settings page with a header, three form fields..."</td>
+  </tr>
+  <tr>
+    <td>Build from Figma</td>
+    <td>"Implement this design from Figma. @(paste Figma link)"</td>
+  </tr>
+  <tr>
+    <td>Tweak something</td>
+    <td>Just describe what you want changed</td>
+  </tr>
+  <tr>
+    <td>Think through an approach</td>
+    <td>Switch to Plan mode and describe what you're trying to do</td>
+  </tr>
+  <tr>
+    <td>Debug a problem</td>
+    <td>Switch to Debug mode and describe what's broken</td>
+  </tr>
+  <tr>
+    <td>Undo something</td>
+    <td>"Undo that" or Cmd+Z</td>
+  </tr>
+  <tr>
+    <td>Fix something broken</td>
+    <td>Just describe the problem</td>
+  </tr>
+</table>
+
+<h2 id="troubleshooting">If Something Goes Wrong</h2>
+
+<p>Just describe it to the agent, it knows the project and common issues:</p>
+
+<pre><code>The browser is showing a blank white page</code></pre>
+
+<pre><code>The dev server stopped</code></pre>
+
+<pre><code>Figma isn't connecting</code></pre>
+
+<p>If the agent can't access Figma, go to <strong>Cursor Settings → MCP</strong> and check that Figma shows as connected. Click "Connect" again if needed.</p>
+
+</div>
+
+<script>
+document.querySelectorAll('pre').forEach(function(pre) {
+  var btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.addEventListener('click', function() {
+    var code = pre.querySelector('code');
+    var text = (code || pre).textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+    });
+  });
+  pre.style.position = 'relative';
+  pre.appendChild(btn);
+});
+</script>
+
+</body>
+</html>

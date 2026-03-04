@@ -1,0 +1,193 @@
+{
+  "project": {
+    "name": "Design Template",
+    "created": "2026-01-29",
+    "lastUpdated": "2026-02-17"
+  },
+  "walrusMode": "active",
+  "walrusVersion": "60.1.5",
+  "lastUpdated": "2026-03-04T00:00:00.000Z",
+  "knownIssues": {
+    "Badge": {
+      "issue": "Crashes at runtime — internal child component resolves to undefined",
+      "workaround": "Use custom styled NewBadge component instead",
+      "since": "v60.1.5",
+      "reportedAt": "2026-02-17"
+    }
+  },
+  "components": {
+    "SampleCard": {
+      "status": "new",
+      "location": "src/handoff/new/SampleCard.tsx",
+      "purpose": "Demonstration card component showing Design Bridge workflow",
+      "interactions": ["Click action button", "Hover states"],
+      "props": {
+        "title": "string",
+        "description": "string",
+        "onAction": "() => void (optional)",
+        "actionLabel": "string (optional)"
+      },
+      "walrusComponents": ["Button"],
+      "figma": null,
+      "storybook": null,
+      "graduationCandidate": true,
+      "createdAt": "2026-01-29T00:00:00.000Z"
+    },
+    "DatabaseCreate": {
+      "status": "new",
+      "location": "src/pages/DatabaseCreate.tsx",
+      "purpose": "Create Managed Database summary page — full Cloud Panel layout with sidebar nav, top bar, and itemized cost summary card",
+      "interactions": ["Create Managed Database button", "Sidebar navigation", "Search box", "Team dropdown", "Create dropdown"],
+      "props": {},
+      "walrusComponents": ["Button"],
+      "figma": {
+        "fileKey": "9r4lVNxYdWWFuPBVKkJWeh",
+        "nodeId": "189:1755",
+        "fileName": "Visual Identity Exploration",
+        "url": "https://www.figma.com/design/9r4lVNxYdWWFuPBVKkJWeh/Visual-Identity-Exploration?node-id=189-1755&m=dev"
+      },
+      "storybook": null,
+      "graduationCandidate": false,
+      "createdAt": "2026-02-17T00:00:00.000Z"
+    },
+    "SecurityAlertsCard": {
+      "status": "new",
+      "location": "src/handoff/new/SecurityAlertsCard.tsx",
+      "purpose": "Glassmorphic stat card for dark/blue backgrounds showing an alert count with label and learn-more action",
+      "interactions": ["Click learn more link"],
+      "props": {
+        "label": "string (optional, default 'Security Alerts')",
+        "count": "number",
+        "linkText": "string (optional, default 'Learn more')",
+        "onLearnMore": "() => void (optional)"
+      },
+      "walrusComponents": [],
+      "figma": {
+        "fileKey": "9r4lVNxYdWWFuPBVKkJWeh",
+        "nodeId": "208:2457",
+        "fileName": "Visual Identity Exploration",
+        "url": "https://www.figma.com/design/9r4lVNxYdWWFuPBVKkJWeh/Visual-Identity-Exploration?node-id=208-2457&m=dev"
+      },
+      "storybook": {
+        "url": null,
+        "story": null
+      },
+      "graduationCandidate": true,
+      "createdAt": "2026-02-19T00:00:00.000Z"
+    },
+    "WalrusTabs": {
+      "status": "existing",
+      "location": "src/handoff/new/WalrusTabs.tsx",
+      "purpose": "Horizontal tab navigation bar — wraps Walrus TabbedContent with Selected, Unselected, Hover, and Active states handled by the design system",
+      "interactions": ["Click tab to switch", "Hover state", "Active/pressed state"],
+      "props": {
+        "tabs": "string[]",
+        "defaultIndex": "number (optional, default 0)",
+        "children": "React.ReactNode (optional, tab panel content)"
+      },
+      "walrusComponents": ["TabbedContent", "Tab", "TabList", "TabPanel", "TabPanels"],
+      "figma": {
+        "fileKey": "exezZpUqmYNaCq4Zz5Tafnqo",
+        "nodeId": "31020:7603",
+        "fileName": "Walrus Design System",
+        "url": "https://www.figma.com/design/exezZpUqmYNaCq4Zz5Tafnqo/Walrus-Design-System?node-id=31020-7603&m=dev"
+      },
+      "storybook": {
+        "url": "https://walrus.internal.digitalocean.com/?path=/docs/tabbedcontent",
+        "story": "TabbedContent"
+      },
+      "graduationCandidate": false,
+      "createdAt": "2026-02-19T00:00:00.000Z"
+    },
+    "Timer": {
+      "status": "new",
+      "location": "src/handoff/new/Timer.tsx",
+      "purpose": "Circular countdown timer with progress ring, duration presets (1:00, 10:00, 60:00), and start/stop control",
+      "interactions": ["Click time to enter custom duration", "Press Enter to auto-start", "Select duration preset", "Start/stop countdown", "Progress ring animation"],
+      "props": {
+        "defaultPreset": "number (optional, default 600)"
+      },
+      "walrusComponents": ["Button"],
+      "figma": {
+        "fileKey": "17KqkHTgTwLKhLaRVLIk18",
+        "nodeId": "1:41",
+        "fileName": "Untitled",
+        "url": "https://www.figma.com/board/17KqkHTgTwLKhLaRVLIk18/Untitled?node-id=1-41"
+      },
+      "storybook": {
+        "url": null,
+        "story": null
+      },
+      "graduationCandidate": true,
+      "createdAt": "2026-03-03T00:00:00.000Z"
+    },
+    "DatabaseSummaryCard": {
+      "status": "new",
+      "location": "src/handoff/new/DatabaseSummaryCard.tsx",
+      "purpose": "Itemized cost summary card for Create Managed Database flow with compute/storage line items, monthly total, and CTA button",
+      "interactions": ["Click Create Managed Database button", "Loading state with spinner", "HighFive celebration on success", "Back to summary reset"],
+      "props": {
+        "onCreateClick": "() => void (optional)"
+      },
+      "walrusComponents": ["Button", "LoadingState", "HighFive"],
+      "figma": {
+        "fileKey": "Ua2PWuswdVV8MqTN15vxQ4",
+        "nodeId": "1:2",
+        "fileName": "Untitled",
+        "url": "https://www.figma.com/design/Ua2PWuswdVV8MqTN15vxQ4/Untitled?node-id=1-2&m=dev"
+      },
+      "storybook": {
+        "url": null,
+        "story": null
+      },
+      "graduationCandidate": true,
+      "createdAt": "2026-03-03T00:00:00.000Z"
+    },
+    "DropletTagSet": {
+      "status": "new",
+      "location": "src/handoff/new/DropletTagSet.tsx",
+      "purpose": "Horizontal row of resource tags with droplet icons and overflow indicator, composed from Walrus Tag",
+      "interactions": ["Click overflow indicator to expand"],
+      "props": {
+        "tags": "string[] (optional)",
+        "overflowCount": "number (optional, default 23)",
+        "onOverflowClick": "() => void (optional)"
+      },
+      "walrusComponents": ["Tag"],
+      "figma": {
+        "fileKey": "Ua2PWuswdVV8MqTN15vxQ4",
+        "nodeId": "5:371",
+        "fileName": "Untitled",
+        "url": "https://www.figma.com/design/Ua2PWuswdVV8MqTN15vxQ4/Untitled?node-id=5-371&m=dev"
+      },
+      "storybook": {
+        "url": null,
+        "story": null
+      },
+      "graduationCandidate": true,
+      "createdAt": "2026-03-04T00:00:00.000Z"
+    },
+    "ContactFormCard": {
+      "status": "new",
+      "location": "src/handoff/new/ContactFormCard.tsx",
+      "purpose": "Contact form with inputs, Walrus SelectMenu dropdown, textarea, and submit with loading then HighFive success flow with X close to reset",
+      "interactions": ["Fill form fields", "Select environment from dropdown", "Submit form", "Loading state", "HighFive on success", "Click X to reset form"],
+      "props": {
+        "onSubmit": "(data: { firstName, lastName, email, environment, comments }) => void (optional)"
+      },
+      "walrusComponents": ["Button", "SelectMenu", "LoadingState", "HighFive"],
+      "figma": {
+        "fileKey": "Ua2PWuswdVV8MqTN15vxQ4",
+        "nodeId": "1:2",
+        "fileName": "Untitled",
+        "url": "https://www.figma.com/design/Ua2PWuswdVV8MqTN15vxQ4/Untitled?node-id=1-2&m=dev"
+      },
+      "storybook": {
+        "url": null,
+        "story": null
+      },
+      "graduationCandidate": true,
+      "createdAt": "2026-03-04T00:00:00.000Z"
+    }
+  }
+}

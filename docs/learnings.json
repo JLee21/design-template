@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "description": "Structured log of issues, fixes, and patterns discovered during prototyping. Checked automatically by the component checkpoint before building.",
+  "learnings": [
+    {
+      "id": "badge-crash",
+      "category": "walrus-component",
+      "severity": "blocker",
+      "summary": "Badge component crashes at runtime in v60.1.5",
+      "details": "Walrus Badge internal child component resolves to undefined, causing React error: 'Element type is invalid: expected a string but got: undefined'. This crashes the entire page with a blank white screen.",
+      "fix": "Replace Badge import with a custom styled.span mimicking Badge styles. Use design tokens for colors.",
+      "preventionRule": "Always check docs/learnings.json and the Known Issues table in the component checkpoint rule before importing any Walrus component.",
+      "discoveredAt": "2026-02-17",
+      "relatedFiles": [
+        "src/pages/DatabaseCreate.tsx"
+      ],
+      "tags": [
+        "walrus",
+        "runtime-crash",
+        "Badge",
+        "blank-screen"
+      ]
+    },
+    {
+      "id": "blank-screen-hmr",
+      "category": "dev-environment",
+      "severity": "major",
+      "summary": "HMR corruption after Babel parse errors leaves a permanent blank screen",
+      "details": "When a syntax error (like a fragmented try/catch) causes a Babel parse error during Vite HMR, the module cache can get into a corrupted state. Even after fixing the syntax, HMR replays the stale broken module and the page stays blank.",
+      "fix": "Full page reload (Cmd+Shift+R) or restart the dev server. Never rely on HMR recovery after a syntax error.",
+      "preventionRule": "After any edit that might introduce a syntax error, check the Vite terminal for parse errors. If one occurs, do a full reload before continuing.",
+      "discoveredAt": "2026-02-17",
+      "relatedFiles": [
+        "src/pages/DatabaseCreate.tsx",
+        "src/main.tsx"
+      ],
+      "tags": [
+        "vite",
+        "hmr",
+        "blank-screen",
+        "babel"
+      ]
+    },
+    {
+      "id": "stale-port",
+      "category": "dev-environment",
+      "severity": "major",
+      "summary": "Browser connected to stale dev server on wrong port",
+      "details": "When Vite picks a new port (e.g. 5177 because 5176 is busy), old servers on previous ports may still be running. If the browser is still pointed at the old port, it shows stale content — including broken versions from before a fix.",
+      "fix": "Always check which port Vite is using in the terminal output. Kill stale servers with 'lsof -i :PORT | grep LISTEN' and 'kill PID'.",
+      "preventionRule": "After restarting the dev server, verify the active port in terminal output and ensure the browser URL matches.",
+      "discoveredAt": "2026-02-17",
+      "relatedFiles": [],
+      "tags": [
+        "vite",
+        "port",
+        "debugging"
+      ]
+    },
+    {
+      "id": "error-boundary-required",
+      "category": "architecture",
+      "severity": "major",
+      "summary": "React crashes without error boundary produce blank white screen with no feedback",
+      "details": "When a Walrus component or any React component throws during render, the entire app unmounts and shows a blank page. Without an error boundary, there is no way to see what went wrong without opening browser devtools.",
+      "fix": "AppErrorBoundary was added to main.tsx wrapping the entire app. It catches render errors and shows the error message, stack trace, and a reload button.",
+      "preventionRule": "Never remove the AppErrorBoundary from main.tsx. It is the safety net for all runtime crashes.",
+      "discoveredAt": "2026-02-17",
+      "relatedFiles": [
+        "src/main.tsx"
+      ],
+      "tags": [
+        "react",
+        "error-boundary",
+        "blank-screen"
+      ]
+    },
+    {
+      "id": "checkpoint-skipped",
+      "category": "workflow",
+      "severity": "minor",
+      "summary": "Component checkpoint was skipped, leading to wrong component choices",
+      "details": "When building the DatabaseCreate page, the checkpoint step (presenting the component table and waiting for user confirmation) was skipped. This led to using the broken Badge component without giving the user a chance to choose an alternative.",
+      "fix": "The component checkpoint rule was updated with stronger enforcement language: 'THIS IS MANDATORY. DO NOT SKIP THE CHECKPOINT.'",
+      "preventionRule": "Always present the checkpoint table and wait for explicit user confirmation before writing any component code.",
+      "discoveredAt": "2026-02-17",
+      "relatedFiles": [
+        ".cursor/rules/walrus-component-checkpoint.mdc"
+      ],
+      "tags": [
+        "workflow",
+        "checkpoint",
+        "process"
+      ]
+    },
+    {
+      "id": "textinput-formik",
+      "category": "walrus-component",
+      "severity": "major",
+      "summary": "Walrus TextInput/Input requires Formik context",
+      "details": "Walrus TextInput and Input are built on Formik's Field. Using them with plain value/onChange outside a Formik form causes TypeError: formik.getFieldProps is not a function.",
+      "fix": "Either wrap the form in Formik and use TextInput with name/getFieldProps, or use custom styled inputs with Walrus design tokens (style.colors, style.vars) instead of TextInput.",
+      "preventionRule": "When suggesting 'compose from Walrus' with TextInput, note that the form must use Formik or use custom labeled inputs with tokens instead.",
+      "discoveredAt": "2026-03-03",
+      "relatedFiles": [
+        "src/handoff/new/ContactForm.tsx"
+      ],
+      "tags": [
+        "walrus",
+        "TextInput",
+        "Formik",
+        "form"
+      ]
+    },
+    {
+      "id": "input-border-specificity",
+      "category": "walrus-component",
+      "severity": "major",
+      "summary": "Styled-component borders on input/textarea lose to WalrusGlobalStyle specificity",
+      "details": "When using custom styled input or textarea elements alongside WalrusGlobalStyle, the global styles can override the styled-component border declarations, making inputs appear with a lighter border than intended.",
+      "fix": "Use && (doubled class selector) in styled-components to boost specificity: && { border: ...; } &&:focus { border-color: ...; } &&::placeholder { color: ...; }",
+      "preventionRule": "Always use && specificity boost on styled input, textarea, and select elements when WalrusGlobalStyle is active.",
+      "discoveredAt": "2026-03-04",
+      "relatedFiles": [
+        "src/handoff/new/ContactFormCard.tsx"
+      ],
+      "tags": [
+        "walrus",
+        "styled-components",
+        "specificity",
+        "border",
+        "input"
+      ]
+    }
+  ]
+}
