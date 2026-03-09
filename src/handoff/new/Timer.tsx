@@ -21,16 +21,16 @@ const Wrapper = styled.div`
   align-items: center;
   padding: ${style.vars.space['6']};
   background: ${style.colors.white};
-  border: 1px solid ${style.colors.grey.light};
+  border: ${style.vars.borderWidth.thin} solid ${style.colors.grey.light};
   border-radius: ${style.vars.borderRadius.large};
   box-shadow: ${style.vars.boxShadow.base};
-  width: 320px;
+  width: calc(${style.vars.space['10']} * 4.5);
 `;
 
 const RingContainer = styled.div`
   position: relative;
-  width: 176px;
-  height: 176px;
+  width: calc(${style.vars.space['10']} * 2.5);
+  height: calc(${style.vars.space['10']} * 2.5);
   margin-bottom: ${style.vars.space['5']};
 `;
 
@@ -43,15 +43,15 @@ const RingSvg = styled.svg`
 const TrackCircle = styled.circle`
   fill: none;
   stroke: ${style.colors.grey.light};
-  stroke-width: 3;
+  stroke-width: ${style.vars.borderRadius.base};
 `;
 
 const ProgressCircle = styled.circle`
   fill: none;
   stroke: ${style.colors.primary.base};
-  stroke-width: 3;
+  stroke-width: ${style.vars.borderRadius.base};
   stroke-linecap: round;
-  transition: stroke-dashoffset 0.3s ease;
+  transition: stroke-dashoffset ${style.vars.transitionSpeed.base} ${style.vars.easeInOutCubic};
 `;
 
 const TimeDisplay = styled.div`
@@ -67,55 +67,41 @@ const TimeDisplay = styled.div`
 `;
 
 const TimeText = styled.span`
-  font-size: 32px;
+  font-size: calc(${style.vars.fontSize.large} * 1.6);
   font-weight: ${style.vars.fontWeight.bold};
   color: ${style.colors.grey.darkest};
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-variant-numeric: tabular-nums;
 `;
 
 const TimeInput = styled.input`
-  width: 100px;
-  font-size: 32px;
-  font-weight: ${style.vars.fontWeight.bold};
-  color: ${style.colors.grey.darkest};
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid ${style.colors.primary.base};
-  outline: none;
-  padding: 0;
-  caret-color: ${style.colors.primary.base};
+  && {
+    width: calc(${style.vars.space['10']} * 1.4);
+    font-size: calc(${style.vars.fontSize.large} * 1.6);
+    font-weight: ${style.vars.fontWeight.bold};
+    color: ${style.colors.grey.darkest};
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-bottom: ${style.vars.borderWidth.base} solid ${style.colors.primary.base};
+    outline: none;
+    padding: 0;
+    caret-color: ${style.colors.primary.base};
+  }
 `;
 
 const PresetsRow = styled.div`
   display: flex;
-  gap: ${style.vars.space['4']};
+  gap: ${style.vars.space['3']};
   margin-bottom: ${style.vars.space['5']};
 `;
 
-const PresetButton = styled.button<{ isActive: boolean }>`
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: ${style.vars.space['1']} ${style.vars.space['2']};
-  font-size: ${style.vars.fontSize.small};
-  font-weight: ${(props) => (props.isActive ? style.vars.fontWeight.bold : style.vars.fontWeight.base)};
-  color: ${(props) => (props.isActive ? style.colors.primary.base : style.colors.grey.dark)};
-  border-bottom: 2px solid ${(props) => (props.isActive ? style.colors.primary.base : 'transparent')};
-  transition: color ${style.vars.transitionSpeed.base} ${style.vars.easeInOutCubic},
-    border-color ${style.vars.transitionSpeed.base} ${style.vars.easeInOutCubic};
-
-  &:hover {
-    color: ${style.colors.primary.base};
-  }
-`;
-
 const StartButtonWrapper = styled.div`
-  width: 176px;
+  width: calc(${style.vars.space['10']} * 2.5);
 `;
+
+const RADIUS = 80;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 function formatTime(totalSeconds: number): string {
   const m = Math.floor(totalSeconds / 60);
@@ -136,15 +122,11 @@ function parseTime(input: string): number | null {
 
   const plain = trimmed.match(/^(\d+)$/);
   if (plain) {
-    const num = parseInt(plain[1], 10);
-    return num * 60;
+    return parseInt(plain[1], 10) * 60;
   }
 
   return null;
 }
-
-const RADIUS = 80;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 interface TimerProps {
   defaultPreset?: number;
@@ -268,14 +250,16 @@ function TimerBase({ defaultPreset = 600 }: TimerProps) {
 
       <PresetsRow>
         {PRESETS.map((p) => (
-          <PresetButton
+          <Button
             key={p.seconds}
-            isActive={totalSeconds === p.seconds && !running}
+            variation="secondary"
+            compact
+            active={totalSeconds === p.seconds && !running}
             onClick={() => selectPreset(p.seconds)}
             disabled={running}
           >
             {p.label}
-          </PresetButton>
+          </Button>
         ))}
       </PresetsRow>
 
@@ -296,8 +280,14 @@ export const Timer = withDevMode(TimerBase, {
   name: 'Timer',
   status: 'new',
   location: 'src/handoff/new/Timer.tsx',
-  purpose: 'Circular countdown timer with progress ring, duration presets, and start/stop control',
-  interactions: ['Click time to enter custom duration', 'Press Enter to auto-start', 'Select duration preset', 'Start/stop countdown', 'Progress ring animation'],
+  purpose: 'Circular countdown timer with progress ring, Walrus Button presets, and start/stop control',
+  interactions: [
+    'Click time to enter custom duration',
+    'Press Enter to auto-start',
+    'Select duration preset (Walrus Button compact active)',
+    'Start/stop countdown',
+    'Progress ring animation',
+  ],
 });
 
 export type { TimerProps };

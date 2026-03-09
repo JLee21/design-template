@@ -131,6 +131,23 @@
         "border",
         "input"
       ]
+    },
+    {
+      "id": "checkbox-formik-crash",
+      "category": "walrus-component",
+      "severity": "blocker",
+      "summary": "Walrus Checkbox crashes outside Formik context with formik.getFieldProps is not a function",
+      "details": "",
+      "fix": "Replace with custom styled checkbox using Walrus design tokens",
+      "preventionRule": "Never use Walrus Checkbox outside a Formik form. Use custom styled checkbox instead.",
+      "discoveredAt": "2026-03-06",
+      "relatedFiles": [],
+      "tags": [
+        "walrus",
+        "checkbox",
+        "formik",
+        "crash"
+      ]
     }
   ]
 }

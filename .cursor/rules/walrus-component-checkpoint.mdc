@@ -20,6 +20,7 @@ These components have been tested and fail at runtime. Do NOT use them directly:
 |-----------|-------|------------|
 | `Badge` | Crashes — internal child resolves to `undefined`, causing "Element type is invalid" error | Use a custom `styled.span` mimicking Badge styles |
 | `TextInput` / `Input` | Requires Formik context — uses Formik `Field` internally; outside Formik throws `formik.getFieldProps is not a function` | Use Formik wrapper, or custom labeled `<input>` with Walrus design tokens |
+| `Checkbox` | Requires Formik context — uses Formik `Field` internally; outside Formik throws `formik.getFieldProps is not a function` | Use custom styled checkbox with Walrus design tokens |
 
 When building, always check this table before importing a Walrus component. If a component is listed
 here, use the documented workaround instead. Update this table when issues are discovered or resolved.
@@ -47,14 +48,27 @@ This creates a self-improving feedback loop — every debugging session makes th
 **THIS IS MANDATORY. DO NOT SKIP THE CHECKPOINT.**
 
 When the user provides ANY design input (Figma, wireframe, screenshot, or text description), you MUST
-complete ALL five steps in order. Never jump ahead to building without presenting the checkpoint and
-receiving explicit user confirmation.
+complete ALL steps in order. Never jump ahead to building without presenting the checkpoint and
+receiving explicit user confirmation at EACH pass.
+
+### Pass 1 — Component Decisions
 
 1. **Analyze** - Decompose the design into ALL UI elements (see Analysis Rules below)
-2. **List** - Present each element in the checkpoint walkthrough format
-3. **Confirm** - **STOP and WAIT** for user to confirm before building. Do not proceed without a "go", "yes", or explicit approval.
-4. **Build** - Render the EXACT instance from the design (see Build Rules below)
-5. **Track** - Add to handoff/registry.json with full metadata (including figma/storybook fields)
+2. **List** - Present each element in the checkpoint walkthrough format (Cases 1/2/3)
+3. **Confirm** - **STOP and WAIT** for user to confirm component choices. Do not proceed without a "go", "yes", or explicit approval.
+
+### Pass 2 — Styling Decisions (custom elements only)
+
+4. **Identify** - For each element from Pass 1 that is NOT using a Walrus component as-is (Case 1, Case 3 custom parts, or Case 2b modifications), present a styling decision
+5. **List** - For each custom element, show a table of Figma values vs. Walrus token mappings (see Pass 2 Format below)
+6. **Confirm** - **STOP and WAIT** for user to choose "Walrus tokens" or "Figma exact values" for each custom element. Do not proceed without explicit approval.
+
+Elements that use a Walrus component as-is (Case 2a) skip Pass 2 entirely — the component handles its own styling.
+
+### Build & Track
+
+7. **Build** - Render the EXACT instance from the design using the confirmed component and styling choices (see Build Rules below)
+8. **Track** - Add to handoff/registry.json with full metadata (including figma/storybook fields)
 
 ### Analysis Rules: Decompose Before Matching
 
@@ -243,6 +257,39 @@ and confirm or change choices:
 >
 > Reply with your choices (e.g., "1a, 2a, 3a") or "go" to accept my recommendations.
 
+## Pass 2 Format: Styling Decisions
+
+After the user confirms Pass 1 (component choices), present Pass 2 ONLY for elements that
+are custom (not using a Walrus component as-is). Go through them **one at a time**, each
+with its own styling table.
+
+For each custom element, extract the raw values from the Figma design and show the closest
+Walrus token mapping side by side:
+
+> **Styling: Timer Ring**
+>
+> This is a custom element. Here are the values from the design and the closest Walrus tokens:
+>
+> | Property | Figma Value | Walrus Token |
+> |----------|------------|--------------|
+> | Font size | 32px | `calc(fontSize.large * 1.6)` |
+> | Ring size | 176×176px | `calc(space['10'] * 2.5)` |
+> | Stroke width | 3px | `borderRadius.base` |
+> | Transition | 0.3s ease | `transitionSpeed.base + easeInOutCubic` |
+>
+> → **Walrus tokens** or **Figma exact values**?
+
+Rules:
+- Present ONE custom element at a time — do not batch all styling decisions into one table
+- Only include properties where the Figma value differs from a direct Walrus token
+- Skip properties that already have an exact token match (e.g., `color: #0069ff` → `style.colors.primary.base` is obvious and doesn't need a decision)
+- If the user says "Walrus tokens", use `calc()` expressions anchored to the token system
+- If the user says "Figma exact values", use the literal pixel/hex values from the design
+- The user can also mix: "tokens for everything except font size" — respect per-property choices
+- Elements using Walrus components as-is (Case 2a from Pass 1) are NEVER shown in Pass 2
+
+After the user confirms styling for all custom elements, proceed to Build & Track.
+
 ## After User Confirms
 
 For each component:
@@ -271,11 +318,33 @@ These patterns make components incompatible with production. NEVER use them:
 - **No inline styles** — no `style={{ ... }}` on elements; use `styled-components` instead
 - **No hardcoded hex colors** — no `#111827`, `#6b7280`, etc.; use `style.colors.*` tokens
 - **No hardcoded pixel values for spacing** — no `padding: '24px'`, `gap: '8px'`; use `style.vars.space['N']`
+- **No hardcoded font sizes** — no `font-size: 32px`, `font-size: 14px`; use `style.vars.fontSize.*`. If the design requires a size outside the token scale, use `calc()` relative to the nearest token (e.g., `calc(${style.vars.fontSize.large} * 1.6)` for 32px)
+- **No hardcoded font weights** — no `font-weight: 600`; use `style.vars.fontWeight.bold`, `.bolder`, `.base`, or `.light`
+- **No hardcoded font families** — do NOT set `font-family` on elements; `WalrusGlobalStyle` handles this globally. Remove any `-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif` declarations
 - **No hardcoded borders** — no `border: 1px solid black`; use `style.vars.borderWidth.*` + `style.colors.*` tokens
 - **No hardcoded border radius** — no `border-radius: 3px`; use `style.vars.borderRadius.base` or `.large`
+- **No hardcoded widths/heights in px** — no `width: 320px`, `height: 176px`; use `calc()` with `style.vars.space['N']` as the base unit (e.g., `calc(${style.vars.space['10']} * 2.5)`)
+- **No hardcoded transitions** — no `transition: 0.3s ease`; use `style.vars.transitionSpeed.base` or `.long` with `style.vars.easeInOutCubic`
+- **No hardcoded stroke-widths in SVGs** — use a token like `style.vars.borderRadius.base` (3px) or `style.vars.borderWidth.*` for consistency
 - **No Tailwind classes** — no `className="px-4 text-gray-700"`; use `styled-components`
 - **No React 17+ APIs** — no `useId`, `useDeferredValue`, `useTransition`, `useSyncExternalStore`; the target is React 16
 - **No imports from `dev-mode/`** inside the component logic — the `withDevMode` wrapper is added at the bottom, separate from the component itself
+
+### calc() Pattern for Values Outside the Token Scale
+
+When a design requires a value that doesn't exist as a direct token (e.g., 32px font, 176px width),
+express it as `calc()` relative to the nearest Walrus token:
+
+| Need | Token base | Expression |
+|------|-----------|------------|
+| 32px font | `fontSize.large` (20px) | `calc(${style.vars.fontSize.large} * 1.6)` |
+| 176px width | `space['10']` (4.5rem ≈ 72px) | `calc(${style.vars.space['10']} * 2.5)` |
+| 320px width | `space['10']` (4.5rem ≈ 72px) | `calc(${style.vars.space['10']} * 4.5)` |
+| 100px width | `space['10']` (4.5rem ≈ 72px) | `calc(${style.vars.space['10']} * 1.4)` |
+
+This keeps every value anchored to the design system — if token values change, all derived
+values scale proportionally. The `calc()` expression also signals to engineers that the value
+is intentionally derived from the system, not an arbitrary magic number.
 
 ### withDevMode: Dev-Only Wrapper
 

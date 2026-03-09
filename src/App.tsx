@@ -9,8 +9,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DatabaseCreate />} />
-        <Route path="/instructions" element={<Instructions />} />
+        <Route path="/" element={<Instructions />} />
+        <Route path="/create-gpu-droplet" element={<DatabaseCreate />} />
         <Route path="/audit" element={<Audit />} />
       </Routes>
     </BrowserRouter>

@@ -7,6 +7,7 @@ A starter template for building production-ready UI components using DigitalOcea
 - **Cursor** — Request access through [IT Self-Service](https://do-internal.atlassian.net/wiki/spaces/IT/pages/2251456553/How+To+Access+Cursor), then download from [cursor.sh](https://cursor.sh)
 - **A Figma account** with access to the design files
 - **The `design-template` project folder** (shared with you by your team)
+- **Node.js** — required to run the project. If you don't have it, see **Before You Start** below.
 
 ## Getting to Know Cursor
 

@@ -1,11 +1,10 @@
 name: design-template
 static_sites:
   - name: design-template
-    github:
-      repo: jegan/design-template
+    git:
+      repo_clone_url: https://github.com/digitalocean/design-template.git
       branch: main
-      deploy_on_push: true
     build_command: npm run build
     output_dir: dist
-    catchall_document: index.html
+    source_dir: /
     environment_slug: node-js
