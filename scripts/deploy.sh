@@ -32,6 +32,12 @@ if [ ! -d "$DEPLOY_DIR/.git" ]; then
 fi
 
 cd "$DEPLOY_DIR"
+
+if [ -z "$(git config user.email)" ]; then
+  git config user.email "design-lab@digitalocean.com"
+  git config user.name "Design Lab Deploy"
+fi
+
 git pull origin main 2>/dev/null || true
 
 rm -rf "$DEPLOY_DIR"/*
