@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "node scripts/check-walrus.js && vite",
     "check:walrus": "node scripts/check-walrus.js",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "bash scripts/deploy.sh"
   },
   "dependencies": {
     "@do/walrus": "^83.1.5",

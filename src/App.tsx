@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Instructions />} />
         <Route path="/instructions" element={<Instructions />} />
-        <Route path="/database-create" element={<DatabaseCreate />} />
+        <Route path="/create-gpu-droplet" element={<DatabaseCreate />} />
         <Route path="/audit" element={<Audit />} />
         <Route path="/showcase" element={<Showcase />} />
       </Routes>

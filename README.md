@@ -7,6 +7,7 @@ A starter template for building production-ready UI components using DigitalOcea
 - **Cursor** — Request access through [IT Self-Service](https://do-internal.atlassian.net/wiki/spaces/IT/pages/2251456553/How+To+Access+Cursor), then download from [cursor.sh](https://cursor.sh)
 - **A Figma account** with access to the design files
 - **The `design-template` project folder** (shared with you by your team)
+- **Node.js** — required to run the project. If you don't have it, see **Before You Start** below.
 
 ## Getting to Know Cursor
 
@@ -175,6 +176,39 @@ The agent fetches the design, analyzes every element, and shows you a checkpoint
 | Debug a problem          | Switch to Debug mode and describe what's broken                |
 | Undo something           | "Undo that" or Cmd+Z                                          |
 | Fix something broken     | Just describe the problem                                      |
+| Deploy to the live site  | "deploy" (requires VPN)                                        |
+
+## Deploying to the Live Site
+
+The live site is hosted on DigitalOcean App Platform. To push your changes live:
+
+### From Cursor chat
+
+Open chat (**Cmd+L**) and say:
+
+```
+deploy
+```
+
+The agent will commit your code, build the app, and push it live. You'll see a message when it's done.
+
+### From the terminal
+
+```
+npm run deploy
+```
+
+This does three things in one command:
+
+1. Commits and pushes your code to the `design-template` repo
+2. Builds the app
+3. Pushes the built site to the `design-lab` repo, which App Platform auto-deploys
+
+**You need to be on the DO VPN** for the build step to work (it needs access to install Walrus).
+
+### First time deploying?
+
+The deploy script handles everything automatically. The first time you run it, it will clone the `design-lab` repo next to your `design-template` folder. You don't need to set anything up.
 
 ## If Something Goes Wrong
 
@@ -193,3 +227,15 @@ Figma isn't connecting
 ```
 
 If the agent can't access Figma, go to **Cursor Settings → MCP** and check that Figma shows as connected. Click "Connect" again if needed.
+
+```
+Deploy failed — can't install packages
+```
+
+Make sure you're connected to the DO VPN. The build needs VPN access to download Walrus.
+
+```
+Deploy failed — permission denied on design-lab repo
+```
+
+Your SSH key needs to be authorized for the DigitalOcean GitHub org. Go to [github.com/settings/keys](https://github.com/settings/keys), find your key, click "Configure SSO", and authorize `digitalocean`.
