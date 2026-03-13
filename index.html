@@ -7,15 +7,8 @@
     <title>Design Template</title>
   </head>
   <body>
-    <!-- Walrus icon sprite (hidden, used by Icon component via <use xlink:href>) -->
-    <div id="walrus-icons" style="display:none"></div>
-    <script>
-      fetch('/walrus-icons.svg')
-        .then(r => r.text())
-        .then(svg => { document.getElementById('walrus-icons').innerHTML = svg; });
-    </script>
-
     <div id="root"></div>
+    <script>var global = globalThis; var module = {};</script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

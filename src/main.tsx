@@ -1,8 +1,8 @@
+import { WalrusGlobalStyle } from '@do/walrus'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { WalrusGlobalStyle } from '@do/walrus'
-import App from './App.tsx'
-import { DevModeProvider, DevInspector } from '@dev-mode'
+import { DevInspector, DevModeProvider } from '../dev-mode'
+import App from './App'
 
 class AppErrorBoundary extends React.Component<
   { children: React.ReactNode },

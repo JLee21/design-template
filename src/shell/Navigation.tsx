@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDevMode } from '@dev-mode/DevModeProvider';
+import { useDevMode } from '../../dev-mode/DevModeProvider';
 
 /**
  * Navigation - Top navigation bar

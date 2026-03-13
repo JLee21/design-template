@@ -126,21 +126,6 @@ const SidebarSpacer = styled.div`
   flex: 1;
 `;
 
-const BadgeWrapper = styled.div`
-  padding: 8px 16px;
-`;
-
-const NewBadge = styled.span`
-  display: inline-block;
-  padding: 2px 10px;
-  background: #0061eb;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 3px;
-  line-height: 1.4;
-`;
-
 // --- Top Nav Bar ---
 
 const MainArea = styled.div`
@@ -510,57 +495,6 @@ const PROJECTS = [
 
 export default function DatabaseCreate() {
   return (
-    <PageWrapper>
-      {/* Sidebar */}
-      <Sidebar>
-        <LogoArea>
-          <LogoMark><DOLogo /></LogoMark>
-        </LogoArea>
-      </Sidebar>
-
-      {/* Main Area */}
-      <MainArea>
-        <TopBar>
-          <SearchBox>
-            <SearchIconSvg />
-            <SearchPlaceholder>Search by name or IP address (Cmd + B)</SearchPlaceholder>
-          </SearchBox>
-
-          <CreateBtn>
-            Create
-            <ChevronDown color="#ffffff" />
-          </CreateBtn>
-
-          <TopBarDivider />
-
-          <IconBtn aria-label="Support">
-            <HelpIcon />
-          </IconBtn>
-
-          <IconBtn aria-label="Notifications">
-            <BellIcon />
-            <NotifDot />
-          </IconBtn>
-
-          <TopBarDivider />
-
-          <TeamSection>
-            <TeamAvatar>TN</TeamAvatar>
-            <TeamInfo>
-              <TeamName>Team Name</TeamName>
-              <TeamBalance>Balance: $1,234.56</TeamBalance>
-            </TeamInfo>
-            <ChevronDown />
-          </TeamSection>
-
-          <AIAssistantBtn>
-            <AIIcon />
-            AI Assistant
-          </AIAssistantBtn>
-        </TopBar>
-
-        <ContentArea />
-      </MainArea>
-    </PageWrapper>
+    <ContentArea />
   );
 }

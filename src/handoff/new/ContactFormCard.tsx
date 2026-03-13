@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { style, Button, SelectMenu, LoadingState, HighFive } from '@do/walrus';
-import { withDevMode } from '@dev-mode/DevModeProvider';
+import { withDevMode } from '../../../dev-mode/DevModeProvider';
 
 // ============================================================
 // Production code

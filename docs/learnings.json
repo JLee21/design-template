@@ -6,11 +6,13 @@
       "id": "badge-crash",
       "category": "walrus-component",
       "severity": "blocker",
-      "summary": "Badge component crashes at runtime in v60.1.5",
-      "details": "Walrus Badge internal child component resolves to undefined, causing React error: 'Element type is invalid: expected a string but got: undefined'. This crashes the entire page with a blank white screen.",
-      "fix": "Replace Badge import with a custom styled.span mimicking Badge styles. Use design tokens for colors.",
+      "status": "resolved",
+      "summary": "Badge component crashed at runtime in v60.1.5 — RESOLVED in v83.1.5",
+      "details": "Walrus Badge internal child component resolved to undefined in v60.1.5, causing React error: 'Element type is invalid: expected a string but got: undefined'. Fixed in v83.1.5 — Badge works correctly now.",
+      "fix": "Updated @do/walrus to v83.1.5. Badge can now be imported and used directly.",
       "preventionRule": "Always check docs/learnings.json and the Known Issues table in the component checkpoint rule before importing any Walrus component.",
       "discoveredAt": "2026-02-17",
+      "resolvedAt": "2026-03-13",
       "relatedFiles": [
         "src/pages/DatabaseCreate.tsx"
       ],
@@ -18,7 +20,8 @@
         "walrus",
         "runtime-crash",
         "Badge",
-        "blank-screen"
+        "blank-screen",
+        "resolved"
       ]
     },
     {

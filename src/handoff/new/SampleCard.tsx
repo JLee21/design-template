@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { style, Button } from '@do/walrus';
-import { withDevMode } from '@dev-mode/DevModeProvider';
+import { withDevMode } from '../../../dev-mode/DevModeProvider';
 
 interface SampleCardProps {
   title: string;

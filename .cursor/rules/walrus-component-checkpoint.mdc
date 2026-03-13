@@ -8,17 +8,16 @@ alwaysApply: true
 
 You are a design-to-code component checkpoint for DigitalOcean's Walrus design system.
 
-## Current Mode: WALRUS ACTIVE (v60.1.5)
+## Current Mode: WALRUS ACTIVE (v83.1.5)
 
 @do/walrus is installed. Compare all designs against the Walrus catalog below.
 
-## Known Issues (v60.1.5)
+## Known Issues (v83.1.5)
 
 These components have been tested and fail at runtime. Do NOT use them directly:
 
 | Component | Issue | Workaround |
 |-----------|-------|------------|
-| `Badge` | Crashes — internal child resolves to `undefined`, causing "Element type is invalid" error | Use a custom `styled.span` mimicking Badge styles |
 | `TextInput` / `Input` | Requires Formik context — uses Formik `Field` internally; outside Formik throws `formik.getFieldProps is not a function` | Use Formik wrapper, or custom labeled `<input>` with Walrus design tokens |
 
 When building, always check this table before importing a Walrus component. If a component is listed
@@ -316,7 +315,7 @@ The component file has two distinct sections:
 import React from 'react';
 import styled from 'styled-components';
 import { style } from '@do/walrus';
-import { withDevMode } from '@dev-mode/DevModeProvider';
+import { withDevMode } from '../../../dev-mode/DevModeProvider';
 
 // ============================================================
 // Production code — everything above the withDevMode line
@@ -438,7 +437,7 @@ composable from multiple).
 > No single Walrus component matches this, but I can **compose it from**:
 > - `Icon` — for the leading icon
 > - `Text` — for the header title
-> - `Badge` — for the status label *(note: broken in v60.1.5, will use custom styled span)*
+> - `Badge` — for the status label
 >
 > Options:
 > - **(a) Compose from Walrus** — use the building blocks above
@@ -480,7 +479,7 @@ composable from multiple).
 >
 > Reply with your choices (e.g., "1c, 2b, 3a") or "go" to accept my recommendations.
 
-## Walrus Component Catalog (v60.1.5)
+## Walrus Component Catalog (v83.1.5)
 
 ### Buttons & Actions
 - **Button**: `import { Button } from '@do/walrus'`
@@ -584,7 +583,7 @@ composable from multiple).
 - **Alert**: `import { Alert, AlertContainer, useAlert } from '@do/walrus'`
   - Types: success, warning, error, info
 
-- **Badge**: `import { Badge } from '@do/walrus'` ⚠️ **BROKEN in v60.1.5** — crashes at runtime. Use custom styled span instead.
+- **Badge**: `import { Badge } from '@do/walrus'`
 
 - **Tooltip**: `import { Tooltip } from '@do/walrus'`
 

@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-/**
- * Error boundary to catch component render failures
- */
 class ErrorBoundary extends React.Component<
   { name: string; children: React.ReactNode },
   { error: string | null }
@@ -106,72 +103,39 @@ const Note = styled.p`
   font-style: italic;
 `;
 
-// Import ALL Walrus components
 import {
   Accordion, AccordionItem,
-  Alert, AlertContainer,
-  AutocompleteInput,
-  Avatar, SkeletonAvatar, TeamAvatar, UserAvatar,
-  Backdrop,
-  Background,
+  ActionItem,
+  Alert,
+  Avatar,
   Badge,
-  BaseLink,
-  Box,
-  BreadcrumbBack,
-  Button, InlineButton,
-  Card, CardContent, CardFooterRow, CardHeader, CardList, CardListItem,
-  Checkbox,
-  ClickAway,
-  ClickToCopy, CopyButton,
+  Button,
+  Card, CardContent, CardFooterRow, CardHeader,
+  ClickToCopy,
   Code,
   CollapsibleContent,
-  ComboBox,
-  ConditionalWrapper,
-  DOLink,
-  DOLogoNav,
+  Divider,
   DropdownArrow,
-  DropdownMenu, ActionItem, DropdownLink, Divider,
-  FileSelector,
+  DropdownMenu,
   FlexboxGrid,
-  FullScreenWizard, PrimaryContent, SecondaryContent,
-  FullWidthSettingsSection,
   HighFive,
-  Icon, IconSvg,
-  InputStepper,
+  InlineButton,
   Link,
-  Modal,
-  MultiSelectComboBox,
-  NotificationsBadge,
-  Paginator,
-  PasswordMeter,
-  Popover, usePopover,
-  ProgressBar,
-  RadioButton, RadioGroup, RadioGroupDescription,
-  RadioTier,
-  SelectMenu, Option, Dropdown,
-  SettingsActionRow, DetailsRow, RevealContent,
-  SpinnerButton,
-  ErrorState,
-  LoadingPage,
   LoadingState,
-  style, WalrusGlobalStyle,
+  Modal,
+  NotificationsBadge,
+  ProgressBar,
+  SpinnerButton,
+  style,
   Switch,
-  Tab, TabbedContent, TabList, TabPanel, TabPanels,
-  TabbedNav,
-  Cell, Row, Table, Head, Header,
-  Tabs,
-  CopyableTag, Tag,
-  TagEditor,
-  TagGroup,
+  Tab, TabbedContent,
+  TabList, TabPanel, TabPanels,
+  Tag,
   Text,
-  TextArea,
-  TextInput, Input,
   Tooltip,
-  TooltipHelp,
-  TruncatedMultiLineText,
   TruncateText,
   UnstyledButton,
-  VisuallyHidden,
+  VisuallyHidden
 } from '@do/walrus';
 
 function ComponentTest({ name, children, status = 'pending', note }: {
@@ -198,25 +162,13 @@ function ComponentTest({ name, children, status = 'pending', note }: {
 
 export default function Audit() {
   const [switchVal, setSwitchVal] = React.useState(false);
-  const [checkVal, setCheckVal] = React.useState(false);
-  const [radioVal, setRadioVal] = React.useState('a');
-  const [textVal, setTextVal] = React.useState('');
-  const [textAreaVal, setTextAreaVal] = React.useState('');
-  const [selectVal, setSelectVal] = React.useState('');
-  const [stepperVal, setStepperVal] = React.useState(1);
-  const [tags, setTags] = React.useState(['tag1', 'tag2']);
-  const [page, setPage] = React.useState(1);
-  const [accordionIdx, setAccordionIdx] = React.useState(0);
-  const [tabIdx, setTabIdx] = React.useState(0);
   const [showModal, setShowModal] = React.useState(false);
-  const [collapsedOpen, setCollapsedOpen] = React.useState(false);
 
   return (
     <Page>
       <Title>Walrus Component Audit</Title>
-      <Subtitle>Testing every @do/walrus v60.1.5 export with React 16.14.0 + styled-components 5.3.11</Subtitle>
+      <Subtitle>Testing @do/walrus v83.1.5 exports</Subtitle>
 
-      {/* ===== BUTTONS ===== */}
       <h2>Buttons &amp; Actions</h2>
 
       <ComponentTest name="Button" status="works">
@@ -234,9 +186,7 @@ export default function Audit() {
       </ComponentTest>
 
       <ComponentTest name="SpinnerButton" status="works">
-        <SpinnerButton variation="primary" isLoading={false}>Not Loading</SpinnerButton>
-        {' '}
-        <SpinnerButton variation="primary" isLoading={true}>Loading</SpinnerButton>
+        <SpinnerButton variation="primary">Submit</SpinnerButton>
       </ComponentTest>
 
       <ComponentTest name="InlineButton" status="works">
@@ -247,46 +197,7 @@ export default function Audit() {
         <UnstyledButton onClick={() => {}}>Unstyled Button</UnstyledButton>
       </ComponentTest>
 
-      {/* ===== FORM CONTROLS ===== */}
       <h2>Form Controls</h2>
-
-      <ComponentTest name="TextInput" status="works">
-        <TextInput
-          label="Sample Input"
-          value={textVal}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTextVal(e.target.value)}
-          placeholder="Type here..."
-        />
-      </ComponentTest>
-
-      <ComponentTest name="TextArea" status="works">
-        <TextArea
-          label="Sample TextArea"
-          value={textAreaVal}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setTextAreaVal(e.target.value)}
-          placeholder="Multi-line input..."
-        />
-      </ComponentTest>
-
-      <ComponentTest name="Checkbox" status="works">
-        <Checkbox
-          label="Check me"
-          checked={checkVal}
-          onChange={() => setCheckVal(!checkVal)}
-        />
-      </ComponentTest>
-
-      <ComponentTest name="RadioGroup" status="works">
-        <RadioGroup
-          name="audit-radio"
-          value={radioVal}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRadioVal(e.target.value)}
-        >
-          <RadioButton label="Option A" value="a" />
-          <RadioButton label="Option B" value="b" />
-          <RadioButton label="Option C" value="c" />
-        </RadioGroup>
-      </ComponentTest>
 
       <ComponentTest name="Switch" status="works">
         <Switch
@@ -297,73 +208,7 @@ export default function Audit() {
         />
       </ComponentTest>
 
-      <ComponentTest name="SelectMenu" status="works">
-        <SelectMenu
-          label="Choose one"
-          value={selectVal}
-          onChange={(val: string) => setSelectVal(val)}
-        >
-          <Option value="a">Option A</Option>
-          <Option value="b">Option B</Option>
-          <Option value="c">Option C</Option>
-        </SelectMenu>
-      </ComponentTest>
-
-      <ComponentTest name="ComboBox" status="works" note="ComboBox requires specific item format">
-        <ComboBox
-          label="Search"
-          items={[
-            { name: 'Alpha', value: 'alpha' },
-            { name: 'Beta', value: 'beta' },
-            { name: 'Gamma', value: 'gamma' },
-          ]}
-          onChange={() => {}}
-          placeholder="Type to search..."
-        />
-      </ComponentTest>
-
-      <ComponentTest name="InputStepper" status="works">
-        <InputStepper
-          label="Quantity"
-          value={stepperVal}
-          onChange={(val: number) => setStepperVal(val)}
-          min={0}
-          max={10}
-        />
-      </ComponentTest>
-
-      <ComponentTest name="TagEditor" status="works">
-        <TagEditor
-          label="Tags"
-          tags={tags}
-          onChange={(newTags: string[]) => setTags(newTags)}
-        />
-      </ComponentTest>
-
-      <ComponentTest name="PasswordMeter" status="works">
-        <PasswordMeter password="P@ssw0rd123!" />
-      </ComponentTest>
-
-      <ComponentTest name="FileSelector" status="works">
-        <FileSelector onSelectFile={() => {}} />
-      </ComponentTest>
-
-      <ComponentTest name="AutocompleteInput" status="works" note="Requires items and onSelect">
-        <AutocompleteInput
-          label="Autocomplete"
-          items={['Apple', 'Banana', 'Cherry']}
-          onSelect={() => {}}
-        />
-      </ComponentTest>
-
-      {/* ===== LAYOUT ===== */}
       <h2>Layout</h2>
-
-      <ComponentTest name="Box" status="works">
-        <Box style={{ padding: '16px', background: '#f3f4f6', borderRadius: '4px' }}>
-          Box content
-        </Box>
-      </ComponentTest>
 
       <ComponentTest name="Card" status="works">
         <Card>
@@ -387,16 +232,11 @@ export default function Audit() {
       </ComponentTest>
 
       <ComponentTest name="CollapsibleContent" status="works">
-        <div>
-          <Button variation="secondary" compact onClick={() => setCollapsedOpen(!collapsedOpen)}>
-            {collapsedOpen ? 'Collapse' : 'Expand'}
-          </Button>
-          <CollapsibleContent isOpen={collapsedOpen}>
-            <div style={{ padding: '16px', background: '#f3f4f6', marginTop: '8px', borderRadius: '4px' }}>
-              This content is collapsible.
-            </div>
-          </CollapsibleContent>
-        </div>
+        <CollapsibleContent name="audit-collapse" label="Show more">
+          <div style={{ padding: '16px', background: '#f3f4f6', marginTop: '8px', borderRadius: '4px' }}>
+            This content is collapsible.
+          </div>
+        </CollapsibleContent>
       </ComponentTest>
 
       <ComponentTest name="Modal" status="works" note="Click button to test">
@@ -410,26 +250,6 @@ export default function Audit() {
         </div>
       </ComponentTest>
 
-      <ComponentTest name="Table" status="works">
-        <Table>
-          <Head>
-            <Header>Name</Header>
-            <Header>Status</Header>
-            <Header>Action</Header>
-          </Head>
-          <Row>
-            <Cell>Item 1</Cell>
-            <Cell>Active</Cell>
-            <Cell><Button variation="tertiary" compact>Edit</Button></Cell>
-          </Row>
-          <Row>
-            <Cell>Item 2</Cell>
-            <Cell>Inactive</Cell>
-            <Cell><Button variation="tertiary" compact>Edit</Button></Cell>
-          </Row>
-        </Table>
-      </ComponentTest>
-
       <ComponentTest name="FlexboxGrid" status="works">
         <FlexboxGrid>
           <div style={{ flex: 1, padding: '8px', background: '#dbeafe', textAlign: 'center' }}>Col 1</div>
@@ -438,19 +258,10 @@ export default function Audit() {
         </FlexboxGrid>
       </ComponentTest>
 
-      {/* ===== NAVIGATION ===== */}
       <h2>Navigation</h2>
 
       <ComponentTest name="Link" status="works">
-        <Link href="#">Sample Link</Link>
-      </ComponentTest>
-
-      <ComponentTest name="BaseLink" status="works">
-        <BaseLink href="#">Base Link</BaseLink>
-      </ComponentTest>
-
-      <ComponentTest name="BreadcrumbBack" status="works">
-        <BreadcrumbBack to="#">Back to list</BreadcrumbBack>
+        <Link to="#">Sample Link</Link>
       </ComponentTest>
 
       <ComponentTest name="TabbedContent" status="works">
@@ -468,24 +279,15 @@ export default function Audit() {
         </TabbedContent>
       </ComponentTest>
 
-      <ComponentTest name="Paginator" status="works">
-        <Paginator
-          currentPage={page}
-          totalPages={5}
-          onPageChange={(p: number) => setPage(p)}
-        />
-      </ComponentTest>
-
       <ComponentTest name="DropdownMenu" status="works">
-        <DropdownMenu label="Actions">
+        <DropdownMenu>
           <ActionItem onClick={() => {}}>Edit</ActionItem>
           <ActionItem onClick={() => {}}>Duplicate</ActionItem>
           <Divider />
-          <ActionItem onClick={() => {}} destructive>Delete</ActionItem>
+          <ActionItem onClick={() => {}}>Delete</ActionItem>
         </DropdownMenu>
       </ComponentTest>
 
-      {/* ===== FEEDBACK & STATUS ===== */}
       <h2>Feedback &amp; Status</h2>
 
       <ComponentTest name="Alert" status="works">
@@ -500,10 +302,10 @@ export default function Audit() {
       <ComponentTest name="Badge" status="works">
         <div style={{ display: 'flex', gap: '8px' }}>
           <Badge color="green">Active</Badge>
-          <Badge color="blue">Info</Badge>
-          <Badge color="orange">Warning</Badge>
-          <Badge color="red">Error</Badge>
-          <Badge color="grey">Inactive</Badge>
+          <Badge color="default">Info</Badge>
+          <Badge color="grey_dark">Warning</Badge>
+          <Badge color="purple">Misc</Badge>
+          <Badge>Inactive</Badge>
         </div>
       </ComponentTest>
 
@@ -511,10 +313,6 @@ export default function Audit() {
         <Tooltip content="This is a tooltip">
           <span style={{ textDecoration: 'underline', cursor: 'help' }}>Hover me for tooltip</span>
         </Tooltip>
-      </ComponentTest>
-
-      <ComponentTest name="TooltipHelp" status="works">
-        <span>Help tooltip: <TooltipHelp>This explains something</TooltipHelp></span>
       </ComponentTest>
 
       <ComponentTest name="ProgressBar" status="works">
@@ -531,47 +329,26 @@ export default function Audit() {
         </div>
       </ComponentTest>
 
-      <ComponentTest name="ErrorState" status="works">
-        <ErrorState title="Something went wrong" description="Please try again later." />
-      </ComponentTest>
-
       <ComponentTest name="NotificationsBadge" status="works">
         <NotificationsBadge count={5} />
       </ComponentTest>
 
-      {/* ===== DISPLAY ===== */}
       <h2>Display</h2>
 
       <ComponentTest name="Text" status="works">
         <Text>This is a Text component</Text>
       </ComponentTest>
 
-      <ComponentTest name="Icon" status="works" note="Requires walrus-icons.svg sprite to be loaded">
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <Icon name="checkmark" />
-          <Icon name="warning" />
-          <Icon name="info" />
-        </div>
-      </ComponentTest>
-
       <ComponentTest name="Avatar" status="works">
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <Avatar src="" alt="User" />
-          <UserAvatar src="" userName="John Doe" />
-          <TeamAvatar src="" teamName="Design" />
-          <SkeletonAvatar />
+          <Avatar src="" />
         </div>
       </ComponentTest>
 
       <ComponentTest name="Tag" status="works">
         <div style={{ display: 'flex', gap: '8px' }}>
           <Tag>Default Tag</Tag>
-          <CopyableTag text="copy-me">Copyable Tag</CopyableTag>
         </div>
-      </ComponentTest>
-
-      <ComponentTest name="TagGroup" status="works">
-        <TagGroup tags={['React', 'TypeScript', 'Walrus']} />
       </ComponentTest>
 
       <ComponentTest name="Code" status="works">
@@ -585,35 +362,19 @@ export default function Audit() {
       </ComponentTest>
 
       <ComponentTest name="ClickToCopy" status="works">
-        <ClickToCopy text="Copied text!">Click to copy this</ClickToCopy>
+        <ClickToCopy copy="Hello, world!">Click to copy this</ClickToCopy>
       </ComponentTest>
 
       <ComponentTest name="HighFive" status="works" note="Celebration animation component">
         <HighFive />
       </ComponentTest>
 
-      {/* ===== UTILITIES ===== */}
       <h2>Utilities</h2>
 
       <ComponentTest name="VisuallyHidden" status="works">
         <div>
           <span>Visible text</span>
           <VisuallyHidden>This text is visually hidden but accessible</VisuallyHidden>
-        </div>
-      </ComponentTest>
-
-      <ComponentTest name="ConditionalWrapper" status="works">
-        <ConditionalWrapper
-          condition={true}
-          wrapper={(children: React.ReactNode) => <strong>{children}</strong>}
-        >
-          <span>Conditionally wrapped content</span>
-        </ConditionalWrapper>
-      </ComponentTest>
-
-      <ComponentTest name="Backdrop" status="works">
-        <div style={{ position: 'relative', height: '60px', background: '#f3f4f6', borderRadius: '4px' }}>
-          <span style={{ padding: '8px', position: 'relative', zIndex: 1 }}>Content with backdrop behind</span>
         </div>
       </ComponentTest>
 

@@ -2,19 +2,12 @@
   "project": {
     "name": "Design Template",
     "created": "2026-01-29",
-    "lastUpdated": "2026-02-17"
+    "lastUpdated": "2026-03-13"
   },
   "walrusMode": "active",
-  "walrusVersion": "60.1.5",
-  "lastUpdated": "2026-03-04T00:00:00.000Z",
-  "knownIssues": {
-    "Badge": {
-      "issue": "Crashes at runtime — internal child component resolves to undefined",
-      "workaround": "Use custom styled NewBadge component instead",
-      "since": "v60.1.5",
-      "reportedAt": "2026-02-17"
-    }
-  },
+  "walrusVersion": "83.1.5",
+  "lastUpdated": "2026-03-13T00:00:00.000Z",
+  "knownIssues": {},
   "components": {
     "SampleCard": {
       "status": "new",
@@ -188,6 +181,26 @@
       },
       "graduationCandidate": true,
       "createdAt": "2026-03-04T00:00:00.000Z"
+    },
+    "Showcase": {
+      "status": "new",
+      "location": "src/handoff/new/Showcase.tsx",
+      "purpose": "Typography and primitives showcase displaying Heading (h1-h6), Text variants (regular, bold, secondary, tertiary), Card (plain and raiseOnHover), and Badge color variants",
+      "interactions": ["Card raise on hover"],
+      "props": {},
+      "walrusComponents": ["Heading", "Text", "Card", "CardContent", "Badge"],
+      "figma": {
+        "fileKey": "exezZpUqmYNaCq4Zz5Tafnqo",
+        "nodeId": "37924:11246",
+        "fileName": "Walrus Design System",
+        "url": "https://www.figma.com/design/exezZpUqmYNaCq4Zz5Tafnqo/Walrus-Design-System?node-id=37924-11246&m=dev"
+      },
+      "storybook": {
+        "url": null,
+        "story": null
+      },
+      "graduationCandidate": true,
+      "createdAt": "2026-03-13T00:00:00.000Z"
     }
   }
 }

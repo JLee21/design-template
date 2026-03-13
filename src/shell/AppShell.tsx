@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigation } from './Navigation';
 import { Sidebar } from './Sidebar';
-import { useDevMode } from '@dev-mode/DevModeProvider';
+import { useDevMode } from '../../dev-mode/DevModeProvider';
 
 interface AppShellProps {
   children: React.ReactNode;

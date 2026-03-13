@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { style, Button, LoadingState, HighFive } from '@do/walrus';
-import { withDevMode } from '@dev-mode/DevModeProvider';
+import { style, Badge, Button, LoadingState, HighFive } from '@do/walrus';
+import { withDevMode } from '../../../dev-mode/DevModeProvider';
 
 // ============================================================
 // Production code — everything above the withDevMode line
@@ -57,18 +57,6 @@ const HeaderText = styled.h2`
   white-space: nowrap;
 `;
 
-const NewBadge = styled.span`
-  display: inline-block;
-  padding: 2px 10px;
-  background: #127C43;
-  color: ${style.colors.white};
-  font-size: 12px;
-  font-weight: ${style.vars.fontWeight.bolder};
-  border-radius: ${style.vars.borderRadius.base};
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  line-height: 1.5;
-`;
 
 // --- New Component: DatabaseSummaryCard ---
 
@@ -243,7 +231,7 @@ function DatabaseSummaryCardBase({ onCreateClick }: DatabaseSummaryCardProps) {
       <HeaderRow>
         <FailoverIcon />
         <HeaderText>This is a header</HeaderText>
-        <NewBadge>New</NewBadge>
+        <Badge color="green">New</Badge>
       </HeaderRow>
 
       <Card>

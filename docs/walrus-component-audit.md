@@ -1,6 +1,6 @@
 # Walrus Component Audit
 
-**Walrus version:** 60.1.5
+**Walrus version:** 83.1.5
 **React version:** 16.14.0
 **styled-components:** 5.3.11
 **react-router-dom:** 6.30.3

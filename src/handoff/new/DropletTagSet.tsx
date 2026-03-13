@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { style, Tag } from '@do/walrus';
-import { withDevMode } from '@dev-mode/DevModeProvider';
+import { withDevMode } from '../../../dev-mode/DevModeProvider';
 
 // ============================================================
 // Production code
